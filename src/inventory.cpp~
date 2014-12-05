@@ -1,0 +1,185 @@
+#include "inventory.h"
+
+Inventory::Inventory()
+{
+	//Inicialização padrão dos atributos
+	gold = 0;
+	total_defense = 0;
+	total_attack = 0;
+	spaces = 0;
+}
+
+double Inventory::getTotalGold()
+{
+	return gold;
+}
+
+int Inventory::getAvailableSpace()
+{
+	//Espaço total menos espaço ocupado
+	return spaces - items.size();
+}
+
+int Inventory::getTotalDefensePoints()
+{
+	return total_defense;
+}
+
+int Inventory::getTotalAttackPoints()
+{
+	return total_attack;
+}
+
+void Inventory::spendGold(double g)
+{
+	if (g <= 0){
+		std::cout << "[Spend] Invalid gold value (g<=0).\n";
+		return;
+	}
+		
+	if (g > gold){
+		std::cout << "[Spend] Invalid gold value (g>gold).\n";
+		return;
+	}
+	
+	gold -= g;
+}
+
+void Inventory::earnGold(double g)
+{
+	if (g <= 0){
+		std::cout << "[Earn] Invalid gold value (g<=0).\n";
+		return;
+	}
+	
+	gold += g;
+}
+
+void Inventory::setSpaces(int s)
+{
+	if (s <= 0){
+		std::cout << "[Spaces] Invalid space value (s<=0).\n";
+		return;
+	}
+		
+	spaces = s;
+}
+
+Item* Inventory::searchItem(std::string item_name)
+{
+	if (item_name.size() == 0){
+		std::cout << "[Search] Invalid item name.\n";
+		return NULL;
+	}
+
+	//Procura item pelo nome
+	int i;
+	/*for (i = 0; i < items.size(); i++){
+		if (item_name.compare(items.at(i)->getName()) == 0)
+			return items.at(i);
+	}*/
+	
+	for (auto it = items.begin(); it != items.end(); it++){
+		if (item_name.compare(it.first()->getName()) == 0)
+			return it->first;
+	}
+}
+
+Item* Inventory::searchItem(int k)
+{
+	if (k > items.size()){
+		std::cout << "[Search] Invalid item position (k>=items.size()).\n";
+		return NULL;
+	}
+	
+	if (k < 0){
+		std::cout << "[Search] Invalid item position (k<0).\n";
+		return NULL;
+	}
+	
+	//return items.at(k);
+	auto it = items.begin() + k;
+	return it->first;
+}
+
+void Inventory::insertItem(Item* item)
+{
+	if (item == NULL){
+		std::cout << "[Insert] Invalid item (item=NULL).\n";
+		return;
+	}
+
+	if (items.size() == spaces){
+		std::cout << "[Insert] Not enough space.\n";
+		return;
+	}
+	
+	//Atualiza os valores de defesa e ataque totais
+	//total_defense += item->getDefensePoints();
+	//total_attack += item->getAttackPoints();
+	
+	//items.push_back(item, false);
+	items.push_back(std::make_pair(item, false));
+}
+
+void Inventory::removeItem(std::string item_name)
+{
+	if (item_name.size() == 0){
+		std::cout << "[Remove] Invalid item name.\n";
+		return;
+	}
+
+	if (items.size() == 0){
+		std::cout << "[Remove] Inventory empty.\n";
+		return;
+	}
+		
+	int i;
+	//std::vector<Item*>::iterator it;
+	/*for (i = 0; i < items.size(); i++){
+		it = items.begin() + i;
+		if (item_name.compare(items.at(i)->getName()) == 0)
+			//Atualiza os valores de ataque e defesa totais
+			total_attack -= items.at(i)->getAttackPoints();
+			total_defense -= items.at(i)->getDefensePoints();
+			//Apaga o item do inventário
+			items.erase(it);
+	}*/
+	for (auto it = items.begin(); it != items.end(); it++){
+		if (item_name.compare(it.first()->getName()) == 0){
+			if (it->second == true){
+				total_attack -= it->second->getAttackPoints();
+				total_defense -= it->second->getDefensePoints();
+			}
+			
+			items.erase(it);
+		}
+	}
+}
+
+void Inventory::removeItem(int k)
+{
+	if (k > items.size()){
+		std::cout << "[Remove] Invalid item position (k>=items.size()).\n";
+		return;
+	}
+	
+	if (k < 0){
+		std::cout << "[Remove] Invalid item position (k<0).\n";
+		return;
+	}
+
+	if (items.size() == 0){
+		std::cout << "[Remove] Inventory empty.\n";
+		return;
+	}
+	
+	std::vector<std::pair<Item*, bool>>::iterator it;
+	it = items.begin() + k;
+
+	//Atualiza os valores de ataque e defesa totais
+	//total_attack -= items.at(k)->getAttackPoints();
+	//total_defense -= items.at(k)->getDefensePoints();
+	//Apaga o item do inventário
+	items.erase(it);
+}

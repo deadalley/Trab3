@@ -1,0 +1,13 @@
+#include "manapotion.h"
+
+ManaPotion::ManaPotion(std::string name, double price, int rp) : Potion(name, price, rp)
+{
+}
+
+ManaPotion::ManaPotion()
+{
+}
+
+void ManaPotion::use()
+{
+}

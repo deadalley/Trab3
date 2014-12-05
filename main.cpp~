@@ -1,0 +1,126 @@
+#include "character.h"
+#include "knight.h"
+#include "wizard.h"
+#include "thief.h"
+
+#include "inventory.h"
+#include "item.h"
+#include "weapon.h"
+#include "armor.h"
+
+#include "potion.h"
+#include "manapotion.h"
+#include "healthpotion.h"
+
+using namespace std;
+
+//Loop usado para setar atributos de um character
+void setCharacterAssets(Character *character)
+{
+	if (character == NULL)
+		return;
+
+	int k = 0, var = 25, total = 0;
+
+	while (k != -1){
+		total = character->getStrength() + character->getSpeed() + character->getDexterity() + character->getConstitution();
+		cout << "==============" << endl;
+		cout << "Strength: " << character->getStrength() << endl;
+		cout << "Speed: " << character->getSpeed() << endl;
+		cout << "Dexterity: " << character->getDexterity() << endl;
+		cout << "Constitution: " << character->getConstitution() << endl;
+		cout << "\nTotal: " << total << endl;
+		cout << "==============" << endl << endl;
+
+		cout << "1. Set strength" << endl;
+		cout << "2. Set speed" << endl;
+		cout << "3. Set dexterity" << endl;
+		cout << "4. Set constitution" << endl;
+		cout << "5. Exit" << endl;
+
+		cin >> k;
+
+		switch(k){
+
+		case 1:
+			cout << "Strength: ";
+			cin >> var;
+			character->setStrength(var);
+			break;
+
+		case 2:
+			cout << "Speed: ";
+			cin >> var;
+			character->setSpeed(var);
+			break;
+
+		case 3:
+			cout << "Dexterity: ";
+			cin >> var;
+			character->setDexterity(var);
+			break;
+
+		case 4:
+			cout << "Constitution: ";
+			cin >> var;
+			character->setConstitution(var);
+			break;
+
+		case 5:
+			if (total != 100)
+				cout << "\tInvalid values for assets." << endl;
+
+			else k = -1;
+			break;
+		}
+	}
+
+	return;
+}
+
+//Função usada para simular ataques aleatórios entre dois oponentes
+void simulateAttack(Character *ch1, Character *ch2)
+{
+	while (ch1->getHP() > 0 && ch2->getHP() > 0){
+		cout << "============================================" << endl;
+
+		ch1->attackCharacter(ch2);
+		ch2->attackCharacter(ch1);
+
+		cout << endl;
+
+		cout << "\t" << ch1->getName() << ": " << ch1->getHP() << endl;
+		cout << "\t" << ch2->getName() << ": " << ch2->getHP() << endl;
+
+		cout << "============================================" << endl;
+	}
+}
+
+void setInventory(Character *ch)
+{
+	Item generic_armor("Generic Armor", 45.0, 8, 23);
+	Item generic_sword("Generic Sword", 41.0, 29, 1);
+	
+	ManaPotion
+	
+	ch->addToInventory(&generic_helmet);
+	ch->addToInventory(&generic_armor);
+	ch->addToInventory(&generic_shield);
+	ch->addToInventory(&generic_sword);
+}
+
+int main(void){
+	Character *character = new Character("Martin");
+	Knight *knight1 = new Knight("Giuseppe", 12);
+	
+	setInventory(knight1);
+	setInventory(character);
+	
+	setCharacterAssets(knight1);
+	setCharacterAssets(character);
+	
+	knight1->getAttackPoints();
+	cout << character->getAttackPoints() << endl;
+
+	return 0;
+}

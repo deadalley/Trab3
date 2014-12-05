@@ -1,0 +1,9 @@
+#ifndef H_WIZARD
+#define H_WIZARD
+
+class Wizard : public Character {
+protected:
+	
+};
+
+#endif

@@ -1,0 +1,57 @@
+#ifndef H_CHARACTER
+#define H_CHARACTER
+
+#include <iostream>
+#include <string>
+#include <cstdlib>
+#include <ctime>
+#include "item.h"
+#include "inventory.h"
+
+class Character{
+private:
+	std::string alias;
+	Inventory my_items;
+
+	int HP;
+	int MP;
+
+protected:
+	int XP;
+	int strength;
+	int speed;
+	int dexterity;
+	int constitution;
+
+	int power;
+	int accuracy;
+
+	virtual int getDefensePoints();
+	virtual int getAttackPoints();
+
+public:
+	Character(std::string);
+	
+	virtual void attackCharacter(Character*);
+	
+	//Funções auxiliares
+	void addXP(int);
+	void reduceHP(int);
+	void addToInventory(Item*);
+
+	//Setters
+	void setStrength(int);
+	void setSpeed(int);
+	void setDexterity(int);
+	void setConstitution(int);
+
+	//Getters
+	std::string getName();
+	int getStrength();
+	int getSpeed();
+	int getDexterity();
+	int getConstitution();
+	int getHP();
+};
+
+#endif

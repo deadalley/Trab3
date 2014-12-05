@@ -1,0 +1,44 @@
+#include "item.h"
+
+Item::Item(std::string name, double price)
+{
+	while (name.size() == 0){
+		std::cout << "Insert valid Item name: ";
+		std::cin >> name;
+	}
+	
+	while (price <= 0){
+		std::cout << "Insert valid Item price: ";
+		std::cin >> price;
+	}
+		
+/*	while (ap > 50 || ap < 5){
+		std::cout << "Insert valid Item attack points (5~50): ";
+		std::cin >> ap;
+	}
+		
+	while (dp > 30 || dp < 1){
+		std::cout << "Insert valid Item defense points (1~30): ";
+		std::cin >> dp;
+	}
+*/	
+	this->name = name;
+	this->price = price;
+	
+//	attack_points = ap;
+//	defense_points = dp;
+}
+
+Armor::Armor(Armor& arm)
+{
+}
+
+std::string Item::getName()
+{
+	return name;
+}
+
+double Item::getPrice()
+{
+	return price;
+}

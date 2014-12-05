@@ -1,0 +1,29 @@
+#include "wizard.h"
+
+Wizard::Wizard(std::string name, int wisdom) : Character(name)
+{
+	if (wisdom < 0){
+		std::cout << "Invalid wisdom value (" << power << "). Set to 0." << std::endl;
+	}
+	
+	else this->wisdom = wisdom;
+}
+
+int Wizard::getAttackPoints()
+{
+	return Character::getAttackPoints();
+}
+
+int Wizard::getDefensePoints()
+{
+	return Character::getDefensePoints() + wisdom/2;
+}
+
+void Wizard::addWisdom(int wis)
+{
+	wisdom += wis;
+}
+
+void Wizard::attack(Character* ch)
+{
+}

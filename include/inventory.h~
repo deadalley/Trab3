@@ -1,0 +1,43 @@
+#ifndef H_INVENTORY
+#define H_INVENTORY
+
+#include <iostream>
+#include <string>
+#include <vector>
+#include "item.h"
+
+class Inventory{
+private:
+	int spaces;
+	double gold;
+	std::vector<Item*, bool> items;
+
+	//Defesa e ataque de todos os items do inventário somados
+	int total_defense;
+	int total_attack;
+
+public:
+	Inventory();
+	~Inventory();
+	
+	//Getters
+	double getTotalGold();
+	int getAvailableSpace();
+	int getTotalDefensePoints();
+	int getTotalAttackPoints();
+	
+	//Setters
+	void spendGold(double);
+	void earnGold(double);
+
+	void setSpaces(int);
+
+	//Controle de items
+	Item* searchItem(std::string);
+	Item* searchItem(int);
+	void insertItem(Item*);
+	void removeItem(std::string);
+	void removeItem(int);
+};
+
+#endif

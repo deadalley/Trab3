@@ -1,0 +1,13 @@
+#include "healthpotion.h"
+
+HealthPotion::HealthPotion(std::string name, double prioce, int rp) : Potion(name, price, rp)
+{
+}
+
+HealtPotion::~HealthPotion()
+{
+}
+
+void HealthPotion::use()
+{
+}

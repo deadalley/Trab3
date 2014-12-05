@@ -1,0 +1,29 @@
+#include "knight.h"
+
+Knight::Knight(std::string name, int power) : Character(name)
+{
+	if (power < 0){
+		std::cout << "Invalid power value (" << power << "). Set to 0." << std::endl;
+	}
+	
+	else this->power = power;
+}
+
+int Knight::getAttackPoints()
+{
+	return Character::getAttackPoints();
+}
+
+int Knight::getDefensePoints()
+{
+	return Character::getDefensePoints() + power;
+}
+
+void Knight::addPower(int pow)
+{
+	power += pow;
+}
+
+void Knight::attack(Character* ch)
+{
+}

@@ -1,0 +1,19 @@
+#include "potion.h"
+
+Potion::Potion(std::string name, double price, int rp) : Item(name, price)
+{
+	restore_points = rp;
+}
+
+Potion::Potion(Potion& potion)
+{
+}
+
+int Potion::getRestorePoints()
+{
+	return restore_points;
+}
+
+void Potion::use()
+{
+}

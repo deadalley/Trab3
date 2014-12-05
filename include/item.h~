@@ -1,0 +1,26 @@
+#ifndef H_ITEM
+#define H_ITEM
+
+#include <iostream>
+#include <string>
+
+class Item {
+private:
+	std::string name;
+	double price;
+
+protected:
+	int attack_points;
+	int defense_points;
+
+public:
+	Item(std::string, double);
+	Item(Item&);
+
+	//Getters
+	std::string getName();
+	double getPrice();
+	virtual void use();
+};
+
+#endif

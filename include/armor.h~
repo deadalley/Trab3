@@ -1,0 +1,10 @@
+#ifndef H_ARMOR
+#define H_ARMOR
+
+#include "item.h"
+
+class Armor : public Item {
+
+};
+
+#endif

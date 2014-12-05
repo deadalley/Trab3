@@ -1,0 +1,21 @@
+#include "armor.h"
+
+Armor::Armor(std::string name, double price, int dp, double wg) : Item(name, price)
+{
+	while (dp > 20 || dp < 1){
+		std::cout << "Insert valid Item defense points (1~20): ";
+		std::cin >> dp;
+	}
+	
+	while (wg > 20 || wg < 1){
+		std::cout << "Insert valid Armor weight (1~20): ";
+		std::cin >> wg;
+	}
+	
+	defense_points = dp;
+	weight = wg;
+}
+
+Armor::Armor(Armor& armor)
+{
+}

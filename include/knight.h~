@@ -1,0 +1,21 @@
+#ifndef H_KNIGHT
+#define H_KNIGHT
+
+#include "character.h"
+
+class Knight : public Character {
+protected:
+	int power;
+public:
+	using Character::getAttackPoints;
+	using Character::getDefensePoints;
+	int getAttackPoints();
+	int getDefensePoints();
+	
+public:
+	Knight(std::string, int);
+	void attack(Character*);
+	void addPower(int);
+};
+
+#endif

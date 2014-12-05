@@ -1,0 +1,171 @@
+#include "character.h"
+
+Character::Character(std::string name)
+{
+	//Confere a validade do nome
+	while (name.size() == 0){
+		std::cout << "Insert valid Character name: ";
+		std::cin >> name;
+	}
+	
+	alias = name;
+	HP = 100;
+	XP = 1;
+	
+	//Atributos setados
+	strength = 25;
+	speed = 25;
+	dexterity = 25;
+	constitution = 25;
+
+	power = 30;
+	accuracy = 30;
+
+	//Valor inicial
+	my_items.setSpaces(8);
+	my_items.earnGold(100);
+}
+
+std::string Character::getName()
+{
+	return alias;
+}
+
+int Character::getDefensePoints()
+{
+	return ((0.5*constitution) + (0.2*speed) + (0.3*dexterity) + my_items.getTotalDefensePoints()) * (XP/2);
+}
+
+int Character::getAttackPoints()
+{
+	return ((0.5*strength) + (0.3*dexterity) + (0.2*speed) + my_items.getTotalAttackPoints()) * (XP/3);
+}
+
+int Character::getStrength()
+{
+	return strength;
+}
+
+int Character::getSpeed()
+{
+	return speed;
+}
+
+int Character::getDexterity()
+{
+	return dexterity;
+}
+
+int Character::getConstitution()
+{
+	return constitution;
+}
+
+int Character::getHP()
+{
+	return HP;
+}
+
+void Character::attackCharacter(Character* ch)
+{
+	if (ch == NULL)
+		return;
+
+	std::srand(std::time(0));
+	
+	int damage = 0;
+
+	//Chance de errar completamente o golpe
+	if (rand() % (10*XP) == 1){
+		std::cout << "MISS!" << std::endl;
+		return;
+	}
+
+	else {
+		damage = this->getAttackPoints() - ch->getDefensePoints() + ((rand()%11)-5);
+
+		if (damage <= 0) damage = 1;
+
+		//Chance de critical strike
+		if (rand() % (100*XP) == 2){
+			std::cout << "CRITICAL STRIKE!" << std::endl;
+			damage = 2*damage;
+		}
+
+		std::cout << ch->getName() << " takes -" << damage << " from " << this->getName() << std::endl;
+	}
+
+	//Reduz HP do inimigo
+	ch->reduceHP(damage);
+}
+
+void Character::addXP(int xp)
+{
+	if (xp + XP > 100){
+		std::cout << "[AddXP] Invalid xp value (TotalXP>100).\n";
+		return;
+	}
+	
+	if (xp <= 0){
+		std::cout << "[AddXP] Invalid xp value (xp<=0).\n";
+		return;
+	}
+	
+	XP = XP + xp;
+}
+
+void Character::setStrength(int st)
+{
+	if (st <= 0){
+		std::cout << "[Strength] Invalid strength value (st<=0).\n";
+		return;
+	}
+	
+	strength = st;
+}
+
+void Character::setSpeed(int sp)
+{
+	if (sp <= 0){
+		std::cout << "[Speed] Invalid speed value (sp<=0).\n";
+		return;
+	}
+	
+	speed = sp;
+}
+
+void Character::setDexterity(int dt)
+{
+	if (dt <= 0){
+		std::cout << "[Dexterity] Invalid dexterity value (dt<=0).\n";
+		return;
+	}
+	
+	dexterity = dt;
+}
+
+void Character::setConstitution(int ct)
+{
+	if (ct <= 0){
+		std::cout << "[Constitution] Invalid constitution value (ct<=0).\n";
+		return;
+	}
+	
+	constitution = ct;
+}
+
+void Character::addToInventory(Item *item)
+{
+	my_items.insertItem(item);
+}
+
+void Character::reduceHP(int dam)
+{
+	if (dam <= 0)
+		return;
+
+	if (dam > HP)
+		HP = 0;
+	else
+		HP = HP - dam;
+}

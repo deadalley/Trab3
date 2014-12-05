@@ -1,0 +1,30 @@
+#include "thief.h"
+
+Thief::Thief(std::string name, int stealth) : Character(name)
+{
+	if (stealth < 0){
+		std::cout << "Invalid stealth value (" << stealth << "). Set to 0." << std::endl;
+		this->stealth = 0.
+	}
+	
+	else this->stealth = stealth;
+}
+
+int Thief::getAttackPoints()
+{
+	return Character::getAttackPoints() + stealth;
+}
+
+int Thief::getDefensePoints()
+{
+	return Character::getDefensePoints();
+}
+
+void Thief::addStealth(int st)
+{
+	stealth += st;
+}
+
+void Thief::attack(Character* ch)
+{
+}
