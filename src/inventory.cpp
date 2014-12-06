@@ -5,13 +5,15 @@
 Inventory::Inventory()
 {
 	//Inicialização padrão dos atributos
-	gold = 0;
+	gold = 100;
 	total_defense = 0;
 	total_attack = 0;
 	spaces = 0;
 
 	has_armor = false;
 	equipped_weapons = 0;
+
+	spaces = 8;
 }
 
 Inventory::~Inventory()
@@ -188,6 +190,12 @@ void Inventory::removeItem(int k)
 	//Remove o item do inventário
 	it = items.begin() + k;
 	items.erase(it);
+}
+
+bool Inventory::isEmpty()
+{
+	if(items.size()==0) return true;
+	return false;
 }
 
 int Inventory::getItemsSize()

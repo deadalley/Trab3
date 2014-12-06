@@ -1,10 +1,5 @@
 #include "team.h"
 
-Team::Team()
-{
-	name = "INVALID";
-}
-
 Team::Team(std::string name, Color color)
 {
 	//Confere a validade do nome

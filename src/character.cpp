@@ -1,12 +1,7 @@
 #include "character.h"
 #include "team.h"
 
-Character::Character()
-{
-	alias = "INVALID";
-}
-
-Character::Character(std::string name, Team* team, CharacterType type)
+Character::Character(std::string name, Team& team, CharacterType type)
 {
 	//Confere a validade do nome
 	while (name.size() == 0){
@@ -28,14 +23,8 @@ Character::Character(std::string name, Team* team, CharacterType type)
 	power = 30;
 	accuracy = 30;
 
-	gold = 100;
-
-	this->team = team;
+	this->team = &team;
 	this->type = type;
-
-	//Valor inicial
-	my_items.setSpaces(8);
-	my_items.earnGold(100);
 
 	my_items.setParent(this);
 }
@@ -98,11 +87,11 @@ std::string Character::toString()
 	}
 
 	info += "\n";
-	info += "Team: " + team->getName() + "\n\n";
+	info += "Team: " + team->getName() + "\n";
 
 	std::stringstream aux;
 
-	aux << "Gold: " << gold << "\n";
+	aux << "Gold: " << my_items.getTotalGold() << "\n";
 	aux << "------------------\n";
 	aux << "Strength: " << strength << "\n";
 	aux << "Speed: " << speed << "\n";
@@ -129,7 +118,6 @@ void Character::setTeam(Team* team)
 void Character::addXP(int xp)
 {
 	if (xp + XP > 100){
-		//std::cout << "[AddXP] Invalid xp value (TotalXP>100). Setting to 100.\n";
 		XP = 100;
 		return;
 	}
@@ -242,15 +230,11 @@ void Character::reduceHP(int dam)
 void Character::listInventory()
 {
 	std::cout << ">> Listing " << getName() << "'s inventory: " << std::endl;
-	std::stringstream aux;
+	if(my_items.isEmpty()){
+		std::cout << "Inventory is empty." << std::endl;
+	}
 	for (int i = 0; i < my_items.getItemsSize(); i++){
-		/*aux << i+1;
-		std::cout << "\t   " << aux.str() + ". ";
-		my_items.searchItem(i);
-		if (my_items.searchItem(i) == NULL) std::cout << "\t\tNULL at " << i << "\n";
-		else std::cout << my_items.searchItem(i)->getName() << std::endl;
-		aux.str("");*/
-		std::cout << "\t" << i+1 << "   " << my_items.searchItem(i)->getName() << std::endl;
+		std::cout << "\t" << i+1 << ".   " << my_items.searchItem(i)->getName() << std::endl;
 	}
 }
 
@@ -296,4 +280,27 @@ void Character::useManaPotion()
 	}
 
 	std::cout << "No Mana Potions available (" << getName() << ")\n";
+}
+
+void Character::earnGold(double g)
+{
+	my_items.earnGold(g);
+}
+
+void Character::spendGold(double g)
+{
+	my_items.spendGold(g);
+}
+
+double Character::getTotalGold()
+{
+	return my_items.getTotalGold();
+}
+
+//Função que retorna se o personagem está vivo ou não
+bool Character::isAlive(){
+	if(this->HP > 0)
+		return true;
+	else
+		return false;
 }

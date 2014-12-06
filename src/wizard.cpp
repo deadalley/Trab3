@@ -1,12 +1,6 @@
 #include "wizard.h"
 
-Wizard::Wizard(Team& team) : Character()
-{
-	this->team = &team;
-	type = WizardType;
-}
-
-Wizard::Wizard(std::string name, int wisdom, Team& team) : Character(name, NULL, WizardType)
+Wizard::Wizard(std::string name, int wisdom, Team& team) : Character(name, team, WizardType)
 {
 	if (wisdom < 0){
 		std::cout << "Invalid wisdom value (" << wisdom << "). Set to 0." << std::endl;
@@ -14,7 +8,6 @@ Wizard::Wizard(std::string name, int wisdom, Team& team) : Character(name, NULL,
 	}
 	
 	else this->wisdom = wisdom;
-	this->team = &team;
 	type = WizardType;
 }
 

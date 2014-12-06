@@ -51,6 +51,7 @@ public:
 
 	//Funções auxiliares/debuggers
 	int getItemsSize();
+	bool isEmpty();
 	void equipItem(Item*);
 	void setParent(Character*);
 	Character* getParent();

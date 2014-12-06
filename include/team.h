@@ -24,7 +24,6 @@ private:
 	int draw;
 
 public:
-	Team();
 	Team(std::string, Color);
 	virtual ~Team();
 

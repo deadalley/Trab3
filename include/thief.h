@@ -6,13 +6,12 @@
 class Thief : public Character {
 protected:
 	int stealth;
-	
-	int getAttackPoints();
-	int getDefensePoints();
 
 public:
-	Thief(Team&);
 	Thief(std::string, int, Team&);
+
+	int getAttackPoints();
+	int getDefensePoints();
 
 	void addStealth(int);
 

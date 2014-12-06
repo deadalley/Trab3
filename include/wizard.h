@@ -11,7 +11,6 @@ protected:
 	int getDefensePoints();
 	
 public:
-	Wizard(Team&);
 	Wizard(std::string, int, Team&);
 	
 	void addWisdom(int);

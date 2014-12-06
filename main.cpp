@@ -167,20 +167,73 @@ Color color_menu(){
 	}
 }
 
-Armor* armor_menu(){
+Armor* armor_menu(double totalGold){
     int k = 0;
-    StandardItems::printArmors();
-    cout << ">> ";
-    cin >> k;
-    return StandardItems::getArmor(k);
+    Armor* new_armor = NULL;
+    while(1){
+    	StandardItems::printArmors();
+	    cout << "6. Return" << endl;
+	    cout << ">> ";
+	    cin >> k;
+
+	    if(k==6) return NULL;
+	    
+	    k--;
+	    new_armor = StandardItems::getArmor(k);
+
+	    if(new_armor->getPrice()>totalGold)
+	    	cout << ">> Not enough gold.\n";
+	    
+	    else break;
+    }
+
+    return new_armor;
 }
 
-Potion* potion_menu(){
+Potion* potion_menu(double totalGold){
+	int k = 0;
+    Potion* new_potion = NULL;
+    while(1){
+    	StandardItems::printPotions();
+	    cout << "9. Return" << endl;
+	    cout << ">> ";
+	    cin >> k;
 
+	    if(k==9) return NULL;
+	    
+	    k--;
+	    new_potion = StandardItems::getPotion(k);
+
+	    if(new_potion->getPrice()>totalGold)
+	    	cout << ">> Not enough gold.\n";
+	    
+	    else break;
+    }
+
+    return new_potion;
 }
 
-Weapon* weapon_menu(){
+Weapon* weapon_menu(double totalGold){
+	int k = 0;
+    Weapon* new_weapon = NULL;
+    while(1){
+    	StandardItems::printWeapons();
+	    cout << "9. Return" << endl;
+	    cout << ">> ";
+	    cin >> k;
 
+	    if(k==11) return NULL;
+	    
+	    k--;
+	    new_weapon = StandardItems::getWeapon(k);
+
+	    if(new_weapon->getPrice()>totalGold)
+	    	cout << ">> Not enough gold.\n";
+	    
+	    else break;
+    }
+
+    return new_weapon;
 }
 
 void items_store_menu(Character& ch){
@@ -189,7 +242,9 @@ void items_store_menu(Character& ch){
 	while(menu_option != 4){
 		cout << "\n== ITEMS STORE ==" << endl;
 
-		cout << ch.toString();
+		stringstream stream;
+		stream << "Gold: " << ch.getTotalGold() << "\n";
+		cout << stream.str();
 
 		cout << "1. Armors" << endl;
 		cout << "2. Potions" << endl;
@@ -200,21 +255,34 @@ void items_store_menu(Character& ch){
 
 		switch(menu_option){
 			case 1:{
-			    Armor* new_armor = armor_menu();
+				//Armors
+			    Armor* new_armor = armor_menu(ch.getTotalGold());
+			    
+			    if(new_armor==NULL) break;
+			    
+			    ch.spendGold(new_armor->getPrice());
 			    ch.addToInventory(new_armor);
 			    cout << ">> " << new_armor->getName() << " added to " << ch.getName() << "'s inventory." << endl;
 				break;
 			}
 			case 2:{
-				//Set strength
-				Potion* new_potion = potion_menu();
+				//Potions
+				Potion* new_potion = potion_menu(ch.getTotalGold());
+
+				if(new_potion==NULL) break;
+			    
+			    ch.spendGold(new_potion->getPrice());
 			    ch.addToInventory(new_potion);
 			    cout << ">> " << new_potion->getName() << " added to " << ch.getName() << "'s inventory." << endl;
 				break;
 			}
 			case 3:{
-				//Set speed
-				Weapon* new_weapon = weapon_menu();
+				//Weapons
+				Weapon* new_weapon = weapon_menu(ch.getTotalGold());
+				
+				if(new_weapon==NULL) break;
+			    
+			    ch.spendGold(new_weapon->getPrice());
 			    ch.addToInventory(new_weapon);
 			    cout << ">> " << new_weapon->getName() << " added to " << ch.getName() << "'s inventory." << endl;
 				break;
@@ -231,6 +299,7 @@ void character_menu(Character& ch){
 
 		cout << ch.toString();
 
+		cout << "\n";
 		cout << "1. Edit Name" << endl;
 		cout << "2. Set Strength" << endl;
 		cout << "3. Set Speed" << endl;
@@ -326,6 +395,7 @@ void team_menu(Team& team){
 
 		cout << team.toString();
 
+		cout << "\n";
 		cout << "1. Edit Name" << endl;
 		cout << "2. Edit Color" << endl;
 		cout << "3. Add Character" << endl;
@@ -387,7 +457,6 @@ void team_menu(Team& team){
 				if(type == ThiefType) ch = new Thief(name, 5, team);
 				if(type == WizardType) ch = new Wizard(name, 5, team);
 				character_menu(*ch);
-				ch->addToInventory(NULL);
 				team.addChar(ch);
 				break;
 			}
@@ -404,8 +473,7 @@ void team_menu(Team& team){
 					k--;
 					Character *ch = team.searchChar(k);
 					team.removeChar(ch);
-					cout << ">> ";
-					cout << ch->getName() << " removed successfully from " << team.getName() << endl;
+					cout << ">> " << ch->getName() << " removed successfully from " << team.getName() << endl;
 				}
 				cout << ">> [ENTER]";
 				getchar();
@@ -497,6 +565,7 @@ void main_menu(vector<Team*>& teams){
 
 int main(void){
 	srand(time(0));
+	StandardItems::setVectors();
 	vector<Team*> teams;
 
 	main_menu(teams);

@@ -1,12 +1,6 @@
 #include "knight.h"
 
-Knight::Knight(Team& team) : Character()
-{
-	this->team = &team;
-	type = KnightType;
-}
-
-Knight::Knight(std::string name, int power, Team& team) : Character(name, NULL, KnightType)
+Knight::Knight(std::string name, int power, Team& team) : Character(name, team, KnightType)
 {
 	if (power < 0){
 		std::cout << "Invalid power value (" << power << "). Set to 0." << std::endl;
@@ -14,7 +8,6 @@ Knight::Knight(std::string name, int power, Team& team) : Character(name, NULL, 
 	}
 	
 	else this->power = power;
-	this->team = &team;
 	type = KnightType;
 }
 

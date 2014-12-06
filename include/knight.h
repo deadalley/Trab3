@@ -11,7 +11,6 @@ protected:
 	int getDefensePoints();
 	
 public:
-	Knight(Team&);
 	Knight(std::string, int, Team&);
 	
 	void addPower(int);

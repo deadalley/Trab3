@@ -1,12 +1,6 @@
 #include "thief.h"
 
-Thief::Thief(Team& team) : Character()
-{
-	this->team = &team;
-	type = ThiefType;
-}
-
-Thief::Thief(std::string name, int stealth, Team& team) : Character(name, NULL, ThiefType)
+Thief::Thief(std::string name, int stealth, Team& team) : Character(name, team, ThiefType)
 {
 	if (stealth < 0){
 		std::cout << "Invalid stealth value (" << stealth << "). Set to 0." << std::endl;
@@ -14,7 +8,6 @@ Thief::Thief(std::string name, int stealth, Team& team) : Character(name, NULL, 
 	}
 	
 	else this->stealth = stealth;
-	this->team = &team;
 	type = ThiefType;
 }
 

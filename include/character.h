@@ -37,21 +37,18 @@ protected:
 	int power;
 	int accuracy;
 
-	int gold;
-
 	Team* team;
 	CharacterType type;
 
 public:
-	Character();
-	Character(std::string, Team*, CharacterType);
+	Character(std::string, Team&, CharacterType);
 	virtual ~Character();
 	
 	//Add
 	void addXP(int);
 	void addMP(int);
 	void addHP(int);
-
+	
 	//Setters
 	void setName(std::string);
 	void setStrength(int);
@@ -59,7 +56,7 @@ public:
 	void setDexterity(int);
 	void setConstitution(int);
 	void setTeam(Team*);
-
+	
 	//Getters
 	std::string getName();
 	int getStrength();
@@ -67,14 +64,15 @@ public:
 	int getDexterity();
 	int getConstitution();
 	int getHP();
+	double getTotalGold();
 	std::string toString();
 	//Funções getAP e getDP foram mudadas de protected para public
 	//para funcionamento correto na classe team
 	virtual int getDefensePoints();
 	virtual int getAttackPoints();
-
+	
 	virtual void attack(Character&) = 0;
-
+	
 	//Funções auxiliares
 	void reduceHP(int);
 	void addToInventory(Item*);
@@ -82,6 +80,8 @@ public:
 	void equipAll();
 	void useHealthPotion();
 	void useManaPotion();
+	void earnGold(double);
+	void spendGold(double);
+	bool isAlive();
 };
-
 #endif
