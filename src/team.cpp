@@ -205,3 +205,4 @@ void Team::listCharacters()
 	for (int i = 0; i < characters.size(); i++)
 		std::cout << i+1 << ". " << characters.at(i)->getName() << std::endl;
 }
+
