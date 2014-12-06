@@ -7,15 +7,18 @@ class Armor : public Item {
 protected:
 	int defense_points;
 	double weight;
-	
-	int getAttackPoints();
-	int getDefensePoints();
+
 public:
 	Armor(std::string, double, int, double);
 	Armor(Armor&);
 
 	//Getters
 	double getWeight();
+
+	int getDefensePoints();
+	int getAttackPoints();
+
+	//Setters
 	void setWeight(double);
 
 	void use(Character*);

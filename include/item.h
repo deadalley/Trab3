@@ -4,7 +4,6 @@
 #include <iostream>
 #include <string>
 
-//Identifica os tipos de item
 enum ItemType {
 	ArmorType,
 	HealthPotionType,
@@ -19,7 +18,6 @@ private:
 	std::string name;
 	double price;
 
-	//Identifica qual o tipo do item
 	ItemType type;
 
 protected:
@@ -33,15 +31,12 @@ public:
 	//Getters
 	std::string getName();
 	double getPrice();
-	//Os métodos getAP e getDP mudaram de protected para public para
-	//funcionarem corretamente na classe inventory
-	virtual int getAttackPoints();
-	virtual int getDefensePoints();
+	ItemType getType();
+	
+	virtual int getDefensePoints() = 0;
+	virtual int getAttackPoints() = 0;
 
 	virtual void use(Character *ch) = 0;
-
-	//Funções auxiliares
-	ItemType getType();
 };
 
 #endif

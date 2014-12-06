@@ -3,18 +3,11 @@
 
 Character::Character(std::string name, Team& team, CharacterType type)
 {
-	//Confere a validade do nome
-	while (name.size() == 0){
-		std::cout << "Insert valid Character name: ";
-		std::cin >> name;
-	}
-
 	alias = name;
 	HP = 100;
+	MP = 100;
 	XP = 1;
-	MP = 0;
 
-	//Atributos setados
 	strength = 25;
 	speed = 25;
 	dexterity = 25;
@@ -33,14 +26,52 @@ Character::~Character()
 {
 }
 
-int Character::getDefensePoints()
+void Character::addXP(int xp)
 {
-	return ((0.5*constitution) + (0.2*speed) + (0.3*dexterity) + my_items.getTotalDefensePoints()) * (XP/2);
+	//Maximum allowed XP = 100
+	if (xp + XP > 100){
+		XP = 100;
+		return;
+	}
+
+	if (xp + XP < 0){
+		XP = 0;
+		return;
+	}
+
+	XP += xp;
 }
 
-int Character::getAttackPoints()
+void Character::addMP(int mp)
 {
-	return ((0.5*strength) + (0.3*dexterity) + (0.2*speed) + my_items.getTotalAttackPoints()) * (XP/3);
+	//Maximum allowed MP = 100
+	if (mp + MP > 100){
+		MP = 100;
+		return;
+	}
+
+	if (mp + MP < 0){
+		MP = 0;
+		return;
+	}
+
+	MP += mp;
+}
+
+void Character::addHP(int hp)
+{
+	//Maximum allowed HP = 100
+	if (hp + HP > 100){
+		HP = 100;
+		return;
+	}
+
+	if (hp + HP < 0){
+		HP = 0;
+		return;
+	}
+
+	HP += hp;
 }
 
 std::string Character::getName()
@@ -66,6 +97,132 @@ int Character::getDexterity()
 int Character::getConstitution()
 {
 	return constitution;
+}
+
+int Character::getXP()
+{
+	return XP;
+}
+
+int Character::getHP()
+{
+	return HP;
+}
+
+int Character::getMP()
+{
+	return MP;
+}
+
+double Character::getTotalGold()
+{
+	return my_items.getTotalGold();
+}
+
+int Character::getDefensePoints()
+{
+	return ((0.5*constitution) + (0.2*speed) + (0.3*dexterity) + my_items.getTotalDefensePoints()) * (XP/2);
+}
+
+int Character::getAttackPoints()
+{
+	return ((0.5*strength) + (0.3*dexterity) + (0.2*speed) + my_items.getTotalAttackPoints()) * (XP/3);
+}
+
+void Character::setName(std::string name)
+{
+	alias = name;
+}
+
+void Character::setTeam(Team* team)
+{
+	this->team = team;
+}
+
+void Character::setStrength(int st)
+{
+	strength = st;
+}
+
+void Character::setSpeed(int sp)
+{
+	speed = sp;
+}
+
+void Character::setDexterity(int dt)
+{
+	dexterity = dt;
+}
+
+void Character::setConstitution(int ct)
+{
+	constitution = ct;
+}
+
+void Character::useHealthPotion()
+{
+	Item *item;
+	for (int i = 0; i < my_items.getItemsSize(); i++){
+		item = my_items.searchItem(i);
+		if (item->getType() == HealthPotionType){
+			item->use(this);
+			my_items.removeItem(i);
+			return;
+		}
+	}
+
+	std::cout << ">> No Health Potions available (" << getName() << ").\n";
+}
+
+void Character::useManaPotion()
+{
+	Item *item;
+	for (int i = 0; i < my_items.getItemsSize(); i++){
+		item = my_items.searchItem(i);
+		if (item->getType() == ManaPotionType){
+			item->use(this);
+			my_items.removeItem(i);
+			return;
+		}
+	}
+
+	std::cout << ">> No Mana Potions available (" << getName() << ").\n";
+}
+
+void Character::earnGold(double g)
+{
+	my_items.earnGold(g);
+}
+
+void Character::spendGold(double g)
+{
+	my_items.spendGold(g);
+}
+
+void Character::listInventory()
+{
+	std::cout << ">> Listing " << getName() << "'s inventory: " << std::endl;
+	if(my_items.isEmpty()){
+		std::cout << "Inventory is empty." << std::endl;
+	}
+	for (int i = 0; i < my_items.getItemsSize(); i++){
+		std::cout << "\t" << i+1 << ".   " << my_items.searchItem(i)->getName() << std::endl;
+	}
+}
+
+void Character::addToInventory(Item *item)
+{
+	my_items.insertItem(item);
+}
+
+void Character::equipAll()
+{
+	Item *item;
+	for (int i = 0; i < my_items.getItemsSize(); i++){
+		item = my_items.searchItem(i);
+		if (item->getType() != HealthPotionType && item->getType() != ManaPotionType)
+			my_items.equipItem(my_items.searchItem(i));
+	}
 }
 
 std::string Character::toString()
@@ -105,199 +262,6 @@ std::string Character::toString()
 	return info;
 }
 
-void Character::setName(std::string name)
-{
-	alias = name;
-}
-
-void Character::setTeam(Team* team)
-{
-	this->team = team;
-}
-
-void Character::addXP(int xp)
-{
-	if (xp + XP > 100){
-		XP = 100;
-		return;
-	}
-
-	if (xp + XP < 0){
-		XP = 0;
-		return;
-	}
-
-	XP += xp;
-}
-
-void Character::addMP(int mp)
-{
-	if (mp + MP > 100){
-		//std::cout << "[AddMP] Invalid mp value (TotalMP>100). Setting to 100.\n";
-		MP = 100;
-		return;
-	}
-
-	if (mp + MP < 0){
-		MP = 0;
-		return;
-	}
-
-	MP += mp;
-}
-
-void Character::addHP(int hp)
-{
-	if (hp + HP > 100){
-		//std::cout << "[AddHP] Invalid hp value (TotalHP>100). Setting to 100.\n";
-		HP = 100;
-		return;
-	}
-
-	if (hp + HP < 0){
-		HP = 0;
-		return;
-	}
-
-	HP += hp;
-}
-
-void Character::setStrength(int st)
-{
-	if (st <= 0){
-		std::cout << "[Strength] Invalid strength value (st<=0).\n";
-		return;
-	}
-
-	strength = st;
-}
-
-void Character::setSpeed(int sp)
-{
-	if (sp <= 0){
-		std::cout << "[Speed] Invalid speed value (sp<=0).\n";
-		return;
-	}
-
-	speed = sp;
-}
-
-void Character::setDexterity(int dt)
-{
-	if (dt <= 0){
-		std::cout << "[Dexterity] Invalid dexterity value (dt<=0).\n";
-		return;
-	}
-
-	dexterity = dt;
-}
-
-void Character::setConstitution(int ct)
-{
-	if (ct <= 0){
-		std::cout << "[Constitution] Invalid constitution value (ct<=0).\n";
-		return;
-	}
-
-	constitution = ct;
-}
-
-//Adiciona um item ao inventário do personagem
-void Character::addToInventory(Item *item)
-{
-	my_items.insertItem(item);
-}
-
-//Retorna o HP do personagem
-int Character::getHP()
-{
-	return HP;
-}
-
-//Dá dano ao personagem
-void Character::reduceHP(int dam)
-{
-	if (dam <= 0)
-		return;
-
-	if (dam > HP)
-		HP = 0;
-	else
-		HP = HP - dam;
-}
-
-//Lista o inventário do personagem (debug)
-void Character::listInventory()
-{
-	std::cout << ">> Listing " << getName() << "'s inventory: " << std::endl;
-	if(my_items.isEmpty()){
-		std::cout << "Inventory is empty." << std::endl;
-	}
-	for (int i = 0; i < my_items.getItemsSize(); i++){
-		std::cout << "\t" << i+1 << ".   " << my_items.searchItem(i)->getName() << std::endl;
-	}
-}
-
-//Função que equipa todos os itens possíveis do inventário
-void Character::equipAll()
-{
-	Item *item;
-	for (int i = 0; i < my_items.getItemsSize(); i++){
-		item = my_items.searchItem(i);
-		//Confere se o item é poção
-		if (item->getType() != HealthPotionType && item->getType() != ManaPotionType)
-			my_items.equipItem(my_items.searchItem(i));
-	}
-}
-
-//Função que usa uma health potion qualquer disponível no inventário
-void Character::useHealthPotion()
-{
-	Item *item;
-	for (int i = 0; i < my_items.getItemsSize(); i++){
-		item = my_items.searchItem(i);
-		if (item->getType() == HealthPotionType){
-			item->use(this);
-			my_items.removeItem(i);
-			return;
-		}
-	}
-
-	std::cout << "No Health Potions available (" << getName() << ")\n";
-}
-
-//Função que usa uma mana potion qualquer disponível no inventário
-void Character::useManaPotion()
-{
-	Item *item;
-	for (int i = 0; i < my_items.getItemsSize(); i++){
-		item = my_items.searchItem(i);
-		if (item->getType() == ManaPotionType){
-			item->use(this);
-			my_items.removeItem(i);
-			return;
-		}
-	}
-
-	std::cout << "No Mana Potions available (" << getName() << ")\n";
-}
-
-void Character::earnGold(double g)
-{
-	my_items.earnGold(g);
-}
-
-void Character::spendGold(double g)
-{
-	my_items.spendGold(g);
-}
-
-double Character::getTotalGold()
-{
-	return my_items.getTotalGold();
-}
-
-//Função que retorna se o personagem está vivo ou não
 bool Character::isAlive(){
 	if(this->HP > 0)
 		return true;

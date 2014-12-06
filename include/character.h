@@ -6,6 +6,7 @@
 #include <sstream>
 #include <cstdlib>
 #include <ctime>
+
 #include "item.h"
 #include "inventory.h"
 #include "armor.h"
@@ -27,6 +28,8 @@ private:
 	int HP;
 	int MP;
 
+	CharacterType type;
+
 protected:
 	int XP;
 	int strength;
@@ -38,7 +41,6 @@ protected:
 	int accuracy;
 
 	Team* team;
-	CharacterType type;
 
 public:
 	Character(std::string, Team&, CharacterType);
@@ -48,40 +50,45 @@ public:
 	void addXP(int);
 	void addMP(int);
 	void addHP(int);
-	
-	//Setters
-	void setName(std::string);
-	void setStrength(int);
-	void setSpeed(int);
-	void setDexterity(int);
-	void setConstitution(int);
-	void setTeam(Team*);
-	
+	void addToInventory(Item*);
+
 	//Getters
 	std::string getName();
+
 	int getStrength();
 	int getSpeed();
 	int getDexterity();
 	int getConstitution();
+	
+	int getXP();
 	int getHP();
+	int getMP();
+	
 	double getTotalGold();
-	std::string toString();
-	//Funções getAP e getDP foram mudadas de protected para public
-	//para funcionamento correto na classe team
+	
 	virtual int getDefensePoints();
 	virtual int getAttackPoints();
 	
-	virtual void attack(Character&) = 0;
-	
-	//Funções auxiliares
-	void reduceHP(int);
-	void addToInventory(Item*);
-	void listInventory();
-	void equipAll();
+	//Setters
+	void setName(std::string);
+	void setTeam(Team*);
+	void setStrength(int);
+	void setSpeed(int);
+	void setDexterity(int);
+	void setConstitution(int);
+
 	void useHealthPotion();
 	void useManaPotion();
+
 	void earnGold(double);
 	void spendGold(double);
+
+	void listInventory();
+	void equipAll();
+
+	std::string toString();
 	bool isAlive();
+	virtual void attack(Character&) = 0;
+	
 };
 #endif

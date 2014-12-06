@@ -10,10 +10,12 @@ protected:
 public:
 	Thief(std::string, int, Team&);
 
-	int getAttackPoints();
-	int getDefensePoints();
-
+	//Add
 	void addStealth(int);
+
+	//Getters
+	int getDefensePoints();
+	int getAttackPoints();
 
 	void attack(Character&);
 };

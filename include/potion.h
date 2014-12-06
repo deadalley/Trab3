@@ -14,6 +14,8 @@ public:
 
 	//Getters
 	int getRestorePoints();
+	int getDefensePoints();
+	int getAttackPoints();
 	
 	virtual void use(Character *ch) = 0;
 };

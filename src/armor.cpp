@@ -2,15 +2,9 @@
 
 Armor::Armor(std::string name, double price, int dp, double wg) : Item(name, price)
 {
-	while (dp > 20 || dp < 1){
-		std::cout << "Insert valid Armor defense points (1~20): ";
-		std::cin >> dp;
-	}
-	
-	while (wg > 20 || wg < 1){
-		std::cout << "Insert valid Armor weight (1~20): ";
-		std::cin >> wg;
-	}
+	//Defense points 1~80
+	if(dp > 80) dp = 80;
+	if(dp < 1) dp = 1;
 	
 	defense_points = dp;
 	weight = wg;
@@ -22,11 +16,13 @@ Armor::Armor(Armor& armor) : Item(armor.getName(), armor.getPrice())
 {
 	defense_points = armor.getDefensePoints();
 	weight = armor.getWeight();
+
+	setType(ArmorType);
 }
 
-void Armor::setWeight(double w)
+double Armor::getWeight()
 {
-	this->weight = w;
+	return weight;
 }
 
 int Armor::getDefensePoints()
@@ -39,12 +35,11 @@ int Armor::getAttackPoints()
 	return 0;
 }
 
-double Armor::getWeight()
+void Armor::setWeight(double w)
 {
-	return weight;
+	weight = w;
 }
 
-//A função use não tem implementação em armor
 void Armor::use(Character *ch)
 {
 }

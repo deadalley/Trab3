@@ -13,9 +13,13 @@ public:
 	Weapon(Weapon&);
 
 	//Getters
-	int getAttackPoints();
-	int getDefensePoints();
 	double getRange();
+
+	int getDefensePoints();
+	int getAttackPoints();
+
+	//Setters
+	void setRange(double);
 
 	void use(Character*);
 };

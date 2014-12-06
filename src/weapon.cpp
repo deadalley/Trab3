@@ -2,13 +2,9 @@
 
 Weapon::Weapon(std::string name, double price, int ap, double ra) : Item(name, price)
 {
-	while (ap > 9 || ap < 1){
-		std::cout << "Insert valid Item attack points (1~9): ";
-		std::cin >> ap;
-	}
-	
-	attack_points = ap;
-	range = ra;
+	//Attack points 1~120
+	if(ap > 120) ap = 120;
+	if(ap < 1) ap = 1;
 
 	setType(WeaponType);
 }
@@ -17,11 +13,13 @@ Weapon::Weapon(Weapon& weapon) : Item(weapon.getName(), weapon.getPrice())
 {
 	attack_points = weapon.getAttackPoints();
 	range = weapon.getRange();
+
+	setType(WeaponType);
 }
 
-int Weapon::getAttackPoints()
+double Weapon::getRange()
 {
-	return attack_points;
+	return range;
 }
 
 int Weapon::getDefensePoints()
@@ -29,9 +27,14 @@ int Weapon::getDefensePoints()
 	return 0;
 }
 
-double Weapon::getRange()
+int Weapon::getAttackPoints()
 {
-	return range;
+	return attack_points;
+}
+
+void Weapon::setRange(double r)
+{
+	range = r;
 }
 
 void Weapon::use(Character *ch)

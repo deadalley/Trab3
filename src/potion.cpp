@@ -2,10 +2,8 @@
 
 Potion::Potion(std::string name, double price, int rp) : Item(name, price)
 {
-	if (rp < 0) {
-		std::cout << "Invalid restore points for potion. Setting to 1.\n";
+	if (rp < 0) 
 		rp = 1;
-	}
 
 	restore_points = rp;
 }
@@ -22,4 +20,14 @@ Potion::~Potion()
 int Potion::getRestorePoints()
 {
 	return restore_points;
+}
+
+int Potion::getDefensePoints()
+{
+	return 0;
+}
+
+int Potion::getAttackPoints()
+{
+	return 0;
 }

@@ -4,16 +4,13 @@
 
 Inventory::Inventory()
 {
-	//Inicialização padrão dos atributos
 	gold = 100;
 	total_defense = 0;
 	total_attack = 0;
-	spaces = 0;
+	spaces = 8;
 
 	has_armor = false;
 	equipped_weapons = 0;
-
-	spaces = 8;
 }
 
 Inventory::~Inventory()
@@ -34,7 +31,6 @@ double Inventory::getTotalGold()
 
 int Inventory::getAvailableSpace()
 {
-	//Espaço total menos espaço ocupado
 	return spaces - items.size();
 }
 
@@ -48,39 +44,31 @@ int Inventory::getTotalAttackPoints()
 	return total_attack;
 }
 
-void Inventory::spendGold(double g)
+Character* Inventory::getParent()
 {
-	if (g <= 0){
-		std::cout << "[Spend] Invalid gold value (g<=0).\n";
-		return;
-	}
-		
-	if (g > gold){
-		std::cout << "[Spend] Invalid gold value (g>gold).\n";
-		return;
-	}
-	
-	gold -= g;
-}
-
-void Inventory::earnGold(double g)
-{
-	if (g <= 0){
-		std::cout << "[Earn] Invalid gold value (g<=0).\n";
-		return;
-	}
-	
-	gold += g;
+	return parent;
 }
 
 void Inventory::setSpaces(int s)
 {
-	if (s <= 0){
-		std::cout << "[Spaces] Invalid space value (s<=0).\n";
-		return;
-	}
-		
+	if(s < 0) return;
 	spaces = s;
+}
+
+void Inventory::setParent(Character *parent)
+{
+	this->parent = parent;
+}
+
+void Inventory::spendGold(double g)
+{
+	if(g > gold) return;
+	gold -= g;
+}
+
+void Inventory::earnGold(double g)
+{	
+	gold += g;
 }
 
 Item* Inventory::searchItem(std::string item_name)
@@ -100,32 +88,14 @@ Item* Inventory::searchItem(std::string item_name)
 
 Item* Inventory::searchItem(int k)
 {
-	if (k > items.size()){
-		std::cout << "[Search] Invalid item position (k>=items.size()).\n";
-		return NULL;
-	}
-	
-	if (k < 0){
-		std::cout << "[Search] Invalid item position (k<0).\n";
-		return NULL;
-	}
+	if(k > items.size() || k < 0) return NULL;
 
 	return items.at(k).first;
 }
 
 void Inventory::insertItem(Item* item)
 {
-	if (item == NULL){
-		std::cout << "[Insert] Invalid item (item=NULL).\n";
-		return;
-	}
-
-	if (items.size() == spaces){
-		std::cout << "[Insert] Not enough space.\n";
-		return;
-	}
-
-	//Todo item é adicionado desequipado
+	if(isFull()) return;
 	std::pair <Item*, bool> p = std::make_pair(item, false);
 	
 	items.push_back(p);
@@ -133,28 +103,20 @@ void Inventory::insertItem(Item* item)
 
 void Inventory::removeItem(std::string item_name)
 {
-	if (item_name.size() == 0){
-		std::cout << "[Remove] Invalid item name.\n";
-		return;
-	}
-
-	if (items.size() == 0){
-		std::cout << "[Remove] Inventory empty.\n";
-		return;
-	}
+	if(isEmpty()) return;
 		
 	std::pair<Item*, bool> p;
 	for (int i = 0; i < items.size(); i++){
 		p = items.at(i);
 		if (item_name.compare(p.first->getName()) == 0){
-			//Se o item estiver equipado, atualiza os valores de ataque e defesa
+			//If the item is equipped, updates total_defense and total_attack
 			if (p.second){
 				total_attack -= p.first->getAttackPoints();
 				total_defense -= p.first->getDefensePoints();
 			}
 
 			std::vector<std::pair<Item*, bool> >::iterator it;
-			//Remove o item do inventário
+			
 			it = items.begin() + i;
 			items.erase(it);
 		}
@@ -163,33 +125,25 @@ void Inventory::removeItem(std::string item_name)
 
 void Inventory::removeItem(int k)
 {
-	if (k > items.size()){
-		std::cout << "[Remove] Invalid item position (k>=items.size()).\n";
-		return;
-	}
-	
-	if (k < 0){
-		std::cout << "[Remove] Invalid item position (k<0).\n";
-		return;
-	}
-
-	if (items.size() == 0){
-		std::cout << "[Remove] Inventory empty.\n";
-		return;
-	}
+	if(k > items.size() || k < 0) return;
 	
 	std::pair<Item*, bool> p = items.at(k);
 
-	//Atualiza os valores de ataque e defesa totais
+	//If the item is equipped, updates total_defense and total_attack
 	if (p.second){
 		total_attack -= p.first->getAttackPoints();
 		total_defense -= p.first->getDefensePoints();
 	}
 	
 	std::vector<std::pair<Item*, bool> >::iterator it;
-	//Remove o item do inventário
+	
 	it = items.begin() + k;
 	items.erase(it);
+}
+
+int Inventory::getItemsSize()
+{
+	return items.size();
 }
 
 bool Inventory::isEmpty()
@@ -198,9 +152,10 @@ bool Inventory::isEmpty()
 	return false;
 }
 
-int Inventory::getItemsSize()
+bool Inventory::isFull()
 {
-	return items.size();
+	if(items.size() == spaces) return true;
+	return false;
 }
 
 //Equipa um dado item no inventário
@@ -247,16 +202,4 @@ void Inventory::equipItem(Item* item)
 	}
 
 	std::cout << "[EquipItem] Item is not present in inventory." << std::endl;
-}
-
-//Seta o character que é dono do inventário
-void Inventory::setParent(Character *parent)
-{
-	this->parent = parent;
-}
-
-//Retorna o character dono do inventário
-Character* Inventory::getParent()
-{
-	return parent;
 }
