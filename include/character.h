@@ -37,6 +37,8 @@ protected:
 	int power;
 	int accuracy;
 
+	int gold;
+
 	Team* team;
 	CharacterType type;
 

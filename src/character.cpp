@@ -28,6 +28,8 @@ Character::Character(std::string name, Team* team, CharacterType type)
 	power = 30;
 	accuracy = 30;
 
+	gold = 100;
+
 	this->team = team;
 	this->type = type;
 
@@ -106,15 +108,11 @@ std::string Character::toString()
 	aux << "Speed: " << speed << "\n";
 	aux << "Dexteriy: " << dexterity << "\n";
 	aux << "Constitution: " << constitution << "\n";
-	aux << "Total: " << strength+speed+dexterity+constitution << "\n";]
+	aux << "Total: " << strength+speed+dexterity+constitution << "\n";
 	aux << "------------------\n";
 
 	info += aux.str();
 
-	/*info += "Strength: " + strength + "\n";
-	info += "Speed: " + speed + "\n";
-	info += "Dexterity: " + dexterity + "\n";
-	info += "Constitution: " + constitution + "\n";*/
 	return info;
 }
 
@@ -243,15 +241,16 @@ void Character::reduceHP(int dam)
 //Lista o inventário do personagem (debug)
 void Character::listInventory()
 {
-	std::cout << "\tListing " << getName() << "'s inventory: " << std::endl;
+	std::cout << ">> Listing " << getName() << "'s inventory: " << std::endl;
 	std::stringstream aux;
 	for (int i = 0; i < my_items.getItemsSize(); i++){
-		aux << i+1;
+		/*aux << i+1;
 		std::cout << "\t   " << aux.str() + ". ";
 		my_items.searchItem(i);
 		if (my_items.searchItem(i) == NULL) std::cout << "\t\tNULL at " << i << "\n";
 		else std::cout << my_items.searchItem(i)->getName() << std::endl;
-		aux.str("");
+		aux.str("");*/
+		std::cout << "\t" << i+1 << "   " << my_items.searchItem(i)->getName() << std::endl;
 	}
 }
 
