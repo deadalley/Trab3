@@ -218,7 +218,7 @@ Weapon* weapon_menu(double totalGold){
     Weapon* new_weapon = NULL;
     while(1){
     	StandardItems::printWeapons();
-	    cout << "9. Return" << endl;
+	    cout << "11. Return" << endl;
 	    cout << ">> ";
 	    cin >> k;
 
@@ -285,6 +285,57 @@ void items_store_menu(Character& ch){
 			    ch.spendGold(new_weapon->getPrice());
 			    ch.addToInventory(new_weapon);
 			    cout << ">> " << new_weapon->getName() << " added to " << ch.getName() << "'s inventory." << endl;
+				break;
+			}
+		}
+	}
+}
+
+void inventory_menu(Character& ch){
+	int menu_option = 0;
+
+	while(menu_option != 4){
+		cout << "== INVENTORY ==" << endl;
+
+		cout << "Listing " << ch.getName() << "'s inventory." << endl;
+		cout << "---------------------------------------------------------------" << endl;
+		ch.listInventory();
+		cout << "---------------------------------------------------------------" << endl;
+		cout << "(E): Equipped" << endl;
+		cout << "(U): Unequipped" << endl;
+
+		cout << "1. Equip Item" << endl;
+		cout << "2. Use Item" << endl;
+		cout << "3. Sell Item" << endl;
+		cout << "4. Return" << endl;
+		cout << ">> ";
+		cin >> menu_option;
+
+		switch(menu_option){
+			case 1:{
+				//Equip Item
+				int k = 0;
+				cout << ">> Select item to equip:" << endl;
+				cout << ">> ";
+				cin >> k;
+				k--;
+				Item* item = ch.retrieveItem(k);
+				ch.equipItem(item);
+				break;
+			}
+			case 2:{
+				//Edit team
+				int k = 0;
+				cout << ">> Select item to use:" << endl;
+				cout << ">> ";
+				cin >> k;
+				k--;
+				Item* item = ch.retrieveItem(k);
+				ch.useItem(item);
+				break;
+			}
+			case 3:{
+				//Battle
 				break;
 			}
 		}
@@ -361,10 +412,11 @@ void character_menu(Character& ch){
 			}
 			case 6:{
 				//Access character inventory
-				ch.listInventory();
+				inventory_menu(ch);
+				/*ch.listInventory();
 				cout << ">> [ENTER]";
 				getchar();
-				getchar();
+				getchar();*/
 			    break;
 			}
 			case 7:{
@@ -389,7 +441,7 @@ void character_menu(Character& ch){
 }
 
 void team_menu(Team& team){
-	int k = 0, menu_option = 0;
+	int menu_option = 0;
 	while(menu_option != 6){
 		cout << "\n== TEAM ==" << endl;
 
@@ -504,7 +556,7 @@ void team_menu(Team& team){
 }
 
 void main_menu(vector<Team*>& teams){
-	int k = 0, menu_option = 0;
+	int menu_option = 0;
 	while(menu_option != 4){
 		cout << "== MENU ==" << endl;
 		cout << "1. New Team" << endl;
