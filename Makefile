@@ -14,6 +14,9 @@ trab2: $(OBJ) obj/main.o
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 	$(CC) $(CFLAGS) $(IFLAGS) $< -o $@
 
+thread:
+	g++ -Wall -I ./include/ -c ./src/thread.cpp -o ./obj/thread.o -std=c++0x
+
 obj/main.o: main.cpp
 	$(CC) $(CFLAGS) $(IFLAGS) main.cpp -o obj/main.o
 
