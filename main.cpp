@@ -15,127 +15,45 @@
 #include "potion.h"
 #include "manapotion.h"
 #include "healthpotion.h"
+#include "standarditems.h"
 #include "cstdio"
 #include "cstdlib"
 
 using namespace std;
 
-//Todos os itens possíveis no jogo
 //Armors
-Armor generic_armor("Generic Armor", 8.0, 2, 2.0);
-Armor leather_armor("Leather Armor", 12.0, 4, 3.0);
-Armor iron_armor("Iron Armor", 13.0, 10, 6.0);
-Armor silver_armor("Silver Armor", 15.0, 15, 8.0);
-Armor gold_armor("Gold Armor", 27.0, 18, 11.0);
-Armor diamond_armor("Diamond Armor", 40.0, 19, 14.0);
+Armor* StandardItems::leather_armor = new Armor("Leather Armor", 12.0, 4, 3.0);
+Armor* StandardItems::iron_armor = new Armor("Iron Armor", 13.0, 10, 6.0);
+Armor* StandardItems::silver_armor = new Armor("Silver Armor", 15.0, 15, 8.0);
+Armor* StandardItems::gold_armor = new Armor("Gold Armor", 27.0, 18, 11.0);
+Armor* StandardItems::diamond_armor = new Armor("Diamond Armor", 40.0, 19, 14.0);
 
 //Weapons
-Weapon dagger("Dagger", 12.0, 4, 4.0);
-Weapon short_sword("Short Sword", 16.0, 6, 5.0);
-Weapon long_sword("Long Sword", 22.0, 7, 10.0);
-Weapon scythe("Scythe of Doom", 28.0, 9, 16.0);
-Weapon axe("Generic Axe", 30.0, 9, 18.0);
+Weapon* StandardItems::dagger = new Weapon("Dagger", 12.0, 4, 4.0);
+Weapon* StandardItems::short_sword = new Weapon("Short Sword", 16.0, 6, 5.0);
+Weapon* StandardItems::long_sword = new Weapon("Long Sword", 22.0, 7, 10.0);
+Weapon* StandardItems::scythe = new Weapon("Scythe of Doom", 28.0, 9, 16.0);
+Weapon* StandardItems::axe = new Weapon("Generic Axe", 30.0, 9, 18.0);
 
-Weapon spear("Generic Spear", 14.0, 6, 14.0);
-Weapon bow("Generic Bow", 18.0, 9, 28.0);
-Weapon staff("Generic Staff", 23.0, 8, 12.0);
-Weapon wand("Generic Wand", 20.0, 8, 2.0);
-Weapon tesseract("Tesseract", 1300.0, 9, 45.0);
+Weapon* StandardItems::spear = new Weapon("Generic Spear", 14.0, 6, 14.0);
+Weapon* StandardItems::bow = new Weapon("Generic Bow", 18.0, 9, 28.0);
+Weapon* StandardItems::staff = new Weapon("Generic Staff", 23.0, 8, 12.0);
+Weapon* StandardItems::wand = new Weapon("Generic Wand", 20.0, 8, 2.0);
+Weapon* StandardItems::tesseract = new Weapon("Tesseract", 1300.0, 9, 45.0);
 
 //Potions
-ManaPotion minor_mana_potion("Minor Mana Potion", 5.0, 3);
-ManaPotion light_mana_potion("Light Mana Potion", 8.0, 5);
-ManaPotion full_mana_potion("Full Mana Potion", 10.0, 10);
+ManaPotion* StandardItems::minor_mana_potion = new ManaPotion("Minor Mana Potion", 5.0, 3);
+ManaPotion* StandardItems::light_mana_potion = new ManaPotion("Light Mana Potion", 8.0, 5);
+ManaPotion* StandardItems::full_mana_potion = new ManaPotion("Full Mana Potion", 10.0, 10);
 
-HealthPotion minor_health_potion("Minor Health Potion", 5.0, 3);
-HealthPotion light_health_potion("Light Health Potion", 8.0, 5);
-HealthPotion regular_health_potion("Regular Health Potion", 10.0, 8);
-HealthPotion full_health_potion("Full Health Potion", 15.0, 10);
-HealthPotion ultra_health_potion("Ultra Health Potion", 25.0, 18);
-
-//Adiciona itens aleatórios ao inventário de um personagem
-void setInventory(Character &ch){
-	//Adiciona uma das 8 combinações de inventário possíveis ao personagem
-	switch(rand()%8) {
-		case 0:
-			ch.addToInventory(&generic_armor);
-			ch.addToInventory(&dagger);
-			ch.addToInventory(&spear);
-			ch.addToInventory(&minor_health_potion);
-			ch.addToInventory(&light_health_potion);
-			ch.addToInventory(&minor_mana_potion);
-			break;
-
-		case 1:
-			ch.addToInventory(&leather_armor);
-			ch.addToInventory(&short_sword);
-			ch.addToInventory(&bow);
-			ch.addToInventory(&minor_health_potion);
-			ch.addToInventory(&light_health_potion);
-			ch.addToInventory(&minor_mana_potion);
-			break;
-
-		case 2:
-			ch.addToInventory(&leather_armor);
-			ch.addToInventory(&long_sword);
-			ch.addToInventory(&staff);
-			ch.addToInventory(&light_health_potion);
-			ch.addToInventory(&light_health_potion);
-			ch.addToInventory(&light_mana_potion);
-			break;
-
-		case 3:
-			ch.addToInventory(&iron_armor);
-			ch.addToInventory(&long_sword);
-			ch.addToInventory(&dagger);
-			ch.addToInventory(&light_health_potion);
-			ch.addToInventory(&light_health_potion);
-			ch.addToInventory(&light_mana_potion);
-			break;
-
-		case 4:
-			ch.addToInventory(&iron_armor);
-			ch.addToInventory(&scythe);
-			ch.addToInventory(&bow);
-			ch.addToInventory(&light_health_potion);
-			ch.addToInventory(&regular_health_potion);
-			ch.addToInventory(&light_mana_potion);
-			break;
-
-		case 5:
-			ch.addToInventory(&silver_armor);
-			ch.addToInventory(&scythe);
-			ch.addToInventory(&wand);
-			ch.addToInventory(&light_health_potion);
-			ch.addToInventory(&regular_health_potion);
-			ch.addToInventory(&full_mana_potion);
-			break;
-
-		case 6:
-			ch.addToInventory(&gold_armor);
-			ch.addToInventory(&axe);
-			ch.addToInventory(&staff);
-			ch.addToInventory(&regular_health_potion);
-			ch.addToInventory(&full_health_potion);
-			ch.addToInventory(&full_mana_potion);
-			break;
-
-		case 7:
-			ch.addToInventory(&diamond_armor);
-			ch.addToInventory(&axe);
-			ch.addToInventory(&tesseract);
-			ch.addToInventory(&full_health_potion);
-			ch.addToInventory(&full_health_potion);
-			ch.addToInventory(&ultra_health_potion);
-			ch.addToInventory(&full_mana_potion);
-			break;
-	}
-
-	ch.equipAll();
-}
+HealthPotion* StandardItems::minor_health_potion = new HealthPotion("Minor Health Potion", 5.0, 3);
+HealthPotion* StandardItems::light_health_potion = new HealthPotion("Light Health Potion", 8.0, 5);
+HealthPotion* StandardItems::regular_health_potion = new HealthPotion("Regular Health Potion", 10.0, 8);
+HealthPotion* StandardItems::full_health_potion = new HealthPotion("Full Health Potion", 15.0, 10);
+HealthPotion* StandardItems::ultra_health_potion = new HealthPotion("Ultra Health Potion", 25.0, 18);
 
 void printTeamVector(vector<Team*>& teams){
-    for(int i=0; i<teams.size(); i++)
+	for(int i=0; i<teams.size(); i++)
         cout << i+1 << ". " << teams.at(i)->getName() << endl;
 }
 
@@ -250,9 +168,19 @@ Color color_menu(){
 }
 
 Armor* armor_menu(){
-    int menu_option = 0;
+    int k = 0;
+    StandardItems::printArmors();
+    cout << ">> ";
+    cin >> k;
+    return StandardItems::getArmor(k);
+}
 
-    while(1)
+Potion* potion_menu(){
+
+}
+
+Weapon* weapon_menu(){
+
 }
 
 void items_store_menu(Character& ch){
@@ -274,21 +202,21 @@ void items_store_menu(Character& ch){
 			case 1:{
 			    Armor* new_armor = armor_menu();
 			    ch.addToInventory(new_armor);
-			    cout << ">> " << new_armor->getName() << " added to " << ch->getName() << "'s inventory." << endl;
+			    cout << ">> " << new_armor->getName() << " added to " << ch.getName() << "'s inventory." << endl;
 				break;
 			}
 			case 2:{
 				//Set strength
 				Potion* new_potion = potion_menu();
 			    ch.addToInventory(new_potion);
-			    cout << ">> " << new_potion->getName() << " added to " << ch->getName() << "'s inventory." << endl;
+			    cout << ">> " << new_potion->getName() << " added to " << ch.getName() << "'s inventory." << endl;
 				break;
 			}
 			case 3:{
 				//Set speed
 				Weapon* new_weapon = weapon_menu();
 			    ch.addToInventory(new_weapon);
-			    cout << ">> " << new_weapon->getName() << " added to " << ch->getName() << "'s inventory." << endl;
+			    cout << ">> " << new_weapon->getName() << " added to " << ch.getName() << "'s inventory." << endl;
 				break;
 			}
 		}
@@ -363,15 +291,19 @@ void character_menu(Character& ch){
 				break;
 			}
 			case 6:{
-			    //Open items store
+				//Access character inventory
+				ch.listInventory();
+				cout << ">> [ENTER]";
+				getchar();
+				getchar();
 			    break;
 			}
 			case 7:{
-				//Access character inventory
-				ch->listInventory();
+				//Open items store
+				items_store_menu(ch);
 				break;
 			}
-			case 7:{
+			case 8:{
 				//Exit
 				if((ch.getStrength() + ch.getSpeed() + ch.getDexterity() + ch.getConstitution()) > 100){
 					cout << ">> ";
@@ -455,20 +387,26 @@ void team_menu(Team& team){
 				if(type == ThiefType) ch = new Thief(name, 5, team);
 				if(type == WizardType) ch = new Wizard(name, 5, team);
 				character_menu(*ch);
+				ch->addToInventory(NULL);
 				team.addChar(ch);
 				break;
 			}
 			case 4:{
 				//Remove character
 				int k = 0;
-				team.listCharacters();
-				cout << ">> ";
-				cin >> k;
-				k--;
-				Character *ch = team.searchChar(k);
-				team.removeChar(ch);
-				cout << ">> ";
-				cout << ch->getName() << " removed successfully from " << team.getName() << endl;
+				if(team.numOfCharacters()==0){
+					cout << ">> No characters in " << team.getName() << ". Please add characters." << endl;
+				}
+				else{
+					team.listCharacters();
+					cout << ">> ";
+					cin >> k;
+					k--;
+					Character *ch = team.searchChar(k);
+					team.removeChar(ch);
+					cout << ">> ";
+					cout << ch->getName() << " removed successfully from " << team.getName() << endl;
+				}
 				cout << ">> [ENTER]";
 				getchar();
 				getchar();
@@ -476,13 +414,21 @@ void team_menu(Team& team){
 			}
 			case 5:{
 				//Edit character
-				int k = -1;
-				team.listCharacters();
-				cout << ">> ";
-				cin >> k;
-				k--;
-				Character *ch = team.searchChar(k);
-				character_menu(*ch);
+				int k = 0;
+				if(team.numOfCharacters()==0){
+					cout << ">> No characters in " << team.getName() << ". Please add characters." << endl;
+					cout << ">> [ENTER]";
+					getchar();
+					getchar();
+				}
+				else{
+					team.listCharacters();
+					cout << ">> ";
+					cin >> k;
+					k--;
+					Character *ch = team.searchChar(k);
+					character_menu(*ch);
+				}
 				break;
 			}
 		}
@@ -523,12 +469,7 @@ void main_menu(vector<Team*>& teams){
 				cin >> k;
 				k--;
 				Team *team = teams.at(k);
-				team.removeChar(ch);
-				cout << ">> ";
-				cout << ch->getName() << " removed successfully from " << team.getName() << endl;
-				cout << ">> [ENTER]";
-				getchar();
-				getchar();
+				team_menu(*team);
 				break;
 			}
 			case 3:{

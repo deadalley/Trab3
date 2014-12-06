@@ -16,6 +16,7 @@ public:
 
 	//Getters
 	double getWeight();
+	void setWeight(double);
 
 	void use(Character*);
 };

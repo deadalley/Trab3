@@ -24,6 +24,11 @@ Armor::Armor(Armor& armor) : Item(armor.getName(), armor.getPrice())
 	weight = armor.getWeight();
 }
 
+void Armor::setWeight(double w)
+{
+	this->weight = w;
+}
+
 int Armor::getDefensePoints()
 {
 	return defense_points;
