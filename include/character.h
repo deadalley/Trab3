@@ -82,6 +82,7 @@ public:
 	void equipAll();
 	void useHealthPotion();
 	void useManaPotion();
+	bool isAlive();
 };
 
 #endif

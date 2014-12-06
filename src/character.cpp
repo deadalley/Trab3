@@ -297,3 +297,11 @@ void Character::useManaPotion()
 
 	std::cout << "No Mana Potions available (" << getName() << ")\n";
 }
+
+//Função que retorna se o personagem está vivo ou não
+bool Character::isAlive(){
+	if(this.HP > 0)
+		return true;
+	else
+		return false;
+}
