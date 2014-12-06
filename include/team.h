@@ -46,6 +46,7 @@ public:
 	void removeChar(Character*);
 	Character* searchChar(std::string);
 	Character* searchChar(int k);
+	int numOfCharacters();
 
 	//Funções auxiliares
 	void listCharacters();

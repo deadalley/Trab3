@@ -194,6 +194,11 @@ Character* Team::searchChar(int k)
 	return characters.at(k);
 }
 
+int Team::numOfCharacters()
+{
+	return characters.size();
+}
+
 //Função que lista os personagens e seus respectivos inventários do time
 void Team::listCharacters()
 {
