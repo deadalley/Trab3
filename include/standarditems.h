@@ -9,6 +9,7 @@
 #include "healthpotion.h"
 #include "manapotion.h"
 
+//Defines the standard items in the game. Extra items cannot be created outside of this class
 class StandardItems {
 private:
     StandardItems();

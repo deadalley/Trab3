@@ -17,10 +17,17 @@
 #include "manapotion.h"
 #include "healthpotion.h"
 #include "standarditems.h"
+#include "thread.h"
+
+#include <utility>
+#include <thread>
+#include <iostream>
+#include <cstdlib>
 #include <cstdio>
 
 using namespace std;
 
+//Initializes all the standard items from StandardItems in the game
 //Armors
 Armor* StandardItems::leather_armor = new Armor("Leather Armor", 12.0, 4, 3.0);
 Armor* StandardItems::iron_armor = new Armor("Iron Armor", 17.0, 23, 6.0);
@@ -57,60 +64,20 @@ void printTeamVector(vector<Team*>& teams){
         cout << i+1 << ". " << teams.at(i)->getName() << endl;
 }
 
-void battle(Team t1, Team t2){
+void batalha(pair<Character*, Character*> p){
 	int round = 0;
-	Character *ch1;
-	Character *ch2;
-	//Realiza várias séries de turnos até que algum dos times esteja com 50 pontos
-	while (t1.getPoints() > 50 && t2.getPoints() > 50){
-		std::cout << "=== ROUND " << round+1 << " ===" <<std::endl;
-		//Personagens aleatórios iniciais de cada time
-		int x = rand()%4;
-		int y = rand()%4;
+	while(p.first->isAlive() && p.second->isAlive()){
+		cout << "====== ROUND " << round << " ======" <<endl;
+		//Atacando
+		p.first->attack(*p.second);
+		p.second->attack(*p.first);
 
-		int turns = 0;
-		while (turns < 8){
-			ch1 = t1.searchChar(x);
-			ch2 = t2.searchChar(y);
-			//0: Team 1 / 1: Team 2
-			switch(rand()%2){
-				case 0:
-					ch1->attack(*ch2);
-					break;
-				case 1:
-					ch2->attack(*ch1);
-					break;
-			}
+		if(p.first->getHP() < 50)
+			p.second->useHealthPotion();
+		if(p.second->getHP() < 50)
+			p.second->useHealthPotion();
 
-			//Faz os personagens utilizarem health potions
-			if (ch1->getHP() < 80){
-				cout << "    ";
-				//ch1->useHealthPotion();
-			}
-			if (ch2->getHP() < 80) {
-				cout << "    ";
-				//ch2->useHealthPotion();
-			}
-
-			//O primeiro personagem de cada time é aleatório
-			//A partir daí, os personagens são selecionados
-			//sequencialmente
-			if (x == 3) x = -1;
-			if (y == 3) y = -1;
-
-			x++;
-			y++;
-			turns++;
-		}
-
-		cout << "\n";
-
-		t1.resolveBattle(t2);
-		t2.resolveBattle(t1);
-
-		//Printa os resultados atuais
-		cout << t1.getResults() << endl;
-		cout << t2.getResults() << endl;
+		//incrementando a rodada
 		round++;
 	}
 }
@@ -597,28 +564,34 @@ void main_menu(vector<Team*>& teams){
 			}
 			case 3:{
 				//Battle
-				int i, j, k, w = 0, y;
+				int i, j, k, w, y;
 				bool found = false;
 				vector <Character*> *Achoosen = new vector<Character*>;
 				vector <Character*> *Bchoosen = new vector<Character*>;
 
 				//Printando o nome dos times
 				for(i = 0; i < (signed)teams.size(); i++)
-					cout << "#" << i << " : " << teams.at(i)->getName() << endl; 
-				cout << "Escolha o primeiro time que deseja batalhar: \n >>";
+					cout << i+1 << " : " << teams.at(i)->getName() << endl; 
+				cout << ">> Choose first team to FIGHT: \n>> ";
 				cin >> i;
+				i--;
+
 				//Printando o nome dos outros times
 				for(j = 0; j < (signed)teams.size(); j++){
 					if(j != i)
-						cout << "#" << i << " : " << teams.at(i)->getName() << endl; 
+						cout << j+1 << ". " << teams.at(j)->getName() << endl; 
 				}
-				cout << "Escolha o segundo time que deseja batalhar: \n >>";
-				cin << y;
+				cout << ">> Choose second team to FIGHT: \n>> ";
+				cin >> j;
+				j--;
 
+				w = 0;
 				//Escolhendo os personagens que farão parte da batalha #Time 1
-				while(w != -1){
+				while(w != -2){
 					//Ainda não escolhidos
-					cout << "\t\t\t 1# Time " << teams.at(i)->getName() << "\n\t == Integrantes disponiveis\n" << endl;
+					cout << "\t== TEAM A: " << teams.at(i)->getName() << " ==" << endl;
+					cout << "\t>> Available characters:" << endl;
+					cout << "---------------------------------------------------------------" << endl;
 					for(k = 0; k < (signed)teams.at(i)->numOfCharacters(); k++){
 						found = false;
 						if(Achoosen->size() != 0){
@@ -630,90 +603,124 @@ void main_menu(vector<Team*>& teams){
 						}
 						//Personagem não escolhido
 						if(!found)
-							cout << "- " << k << " : " << teams.at(i)->searchChar(k)->getName()<<endl;
+							cout << "\t" << k+1 << ".   " << teams.at(i)->searchChar(k)->getName() << endl;
 					}
+					cout << "---------------------------------------------------------------" << endl;
 					//Escolhidos
-					cout << "\n\t == Integrantes escolhidos\n" << endl;
+					cout << "\t>> Chosen characters:" << endl;
+					cout << "---------------------------------------------------------------" << endl;
+					
 					if(Achoosen->size() == 0)
-						cout << " # Nenhum personagem ainda foi escolhido!" <<endl;
-					for(k = 0; k < (signed)Achoosen->size(); k++){
-						cout << "- " << k << " : " << Achoosen.at(k)->getName() << endl;
-					}
+						cout << "\t No characters chosen yet. Please choose characters." <<endl;
+
+					for(k = 0; k < (signed)Achoosen->size(); k++)
+						cout << "\t" << k+1 << ".   " << Achoosen->at(k)->getName() << endl;
+					cout << "---------------------------------------------------------------" << endl;
 					//Escolhendo
-					cout << "Qual personagem você deseja escolher (Digite -1 para sair): \n>> ";
+					cout << ">> Choose character to add to battle OR press -1 to leave: \n>> ";
 					cin >> w;
-					if(w != -1)
+					w--;
+					if(w != -2)
 						Achoosen->push_back(teams.at(i)->searchChar(w)); 
 				}
 
+				w = 0;
 				//Escolhendo os personagens que farão parte da batalha #Time 2
-				while(w != -1){
+				while(w != -2){
 					//Ainda não escolhidos
-					cout << "\t\t\t 1# Time " << teams.at(i)->getName() << "\n\t == Integrantes disponiveis\n" << endl;
-					for(k = 0; k < (signed)teams.at(i)->numOfCharacters(); k++){
+					cout << "\t== TEAM B: " << teams.at(j)->getName() << " ==" << endl;
+					cout << "\t>> Available characters:" << endl;
+					cout << "---------------------------------------------------------------" << endl;
+					for(k = 0; k < (signed)teams.at(j)->numOfCharacters(); k++){
 						found = false;
-						if(Achoosen->size() != 0){
+						if(Bchoosen->size() != 0){
 							//Buscando se o personagem já foi escolhido. Caso já foi, seu nome não será impresso na tela
-							for (y = 0; (y < (signed)Achoosen->size()) && (!found); y++)
+							for (y = 0; (y < (signed)Bchoosen->size()) && (!found); y++)
 								//O personagem já foi escolhido
-								if(teams.at(i)->searchChar(k)->getName() == Achoosen->at(y)->getName())
+								if(teams.at(j)->searchChar(k)->getName() == Bchoosen->at(y)->getName())
 									found = true;
 						}
 						//Personagem não escolhido
 						if(!found)
-							cout << "- " << k << " : " << teams.at(i)->searchChar(k)->getName()<<endl;
+							cout << "\t" << k+1 << ".   " << teams.at(j)->searchChar(k)->getName() << endl;
 					}
+					cout << "---------------------------------------------------------------" << endl;
 					//Escolhidos
-					cout << "\n\t == Integrantes escolhidos\n" << endl;
+					cout << "\t>> Chosen characters:" << endl;
+					cout << "---------------------------------------------------------------" << endl;
+					
 					if(Achoosen->size() == 0)
-						cout << " # Nenhum personagem ainda foi escolhido!" <<endl;
-					for(k = 0; k < (signed)Achoosen->size(); k++){
-						cout << "- " << k << " : " << Achoosen.at(k)->getName() << endl;
-					}
+						cout << "\t No characters chosen yet. Please choose characters." <<endl;
+
+					for(k = 0; k < (signed)Bchoosen->size(); k++)
+						cout << "\t" << k+1 << ".   " << Bchoosen->at(k)->getName() << endl;
+					cout << "---------------------------------------------------------------" << endl;
 					//Escolhendo
-					cout << "Qual personagem você deseja escolher (Digite -1 para sair): \n>> ";
+					cout << ">> Choose character to add to battle OR press -1 to leave: \n>> ";
 					cin >> w;
-					if(w != -1)
-						Achoosen->push_back(teams.at(i)->searchChar(w)); 
+					w--;
+					if(w != -2)
+						Bchoosen->push_back(teams.at(j)->searchChar(w)); 
 				}
 
 				//Igualando o número de personagens na batalha
 				if(Achoosen->size() != Bchoosen->size()){
-					cout << "# Erro! Existem mais personagens selecionados para batalha no time" << (Achoosen->size() > Bchoose->size() ? teams.at(i)->getName() : teams.at(j)->getName());
-					cout << "Abaixo você terá que selecionar quais personagens você terá que deixar fora da batalha" << endl;
+
 					//Se Time 1 tiver selecionado mais personagens que o Time 2
 					if(Achoosen->size() > Bchoosen->size()){
+						cout << ">> Warning! There are too many characters in " << teams.at(i)->getName() << endl;
+						cout << ">> Choose characters to leave out of battle:" << endl;
 						found = false;
 						//Enquanto o número de personagens não for igual nos dois times
 						while(!found){
-							for(i = 0; i < (signed)Achoosen->size(); i++){
-								cout << "- " << i << " : " << Achoosen.at(i)->getName() << endl;
-							}
-							cout << ">> Escolha qual o personagem que você deseja remover: \n >> ";
+							for(k = 0; k < (signed)Achoosen->size(); i++)
+								cout <<  k+1 << ".   " << Achoosen->at(k)->getName() << endl;
+							
+							cout << ">> ";
+							cin >> w;
+							w--;
+							Achoosen->erase(Achoosen->begin() + w);
 							if((Achoosen->size() - Bchoosen->size()) == 0)
 								found = true;
 						}
 					}
 					//Se Time 2 tiver selecionado mais personagens que o Time 1
 					else{
+						cout << ">> Warning! There are too many characters in " << teams.at(j)->getName() << endl;
+						cout << ">> Choose characters to leave out of battle:" << endl;
 						found = false;
 						//Enquanto o número de personagens não for igual nos dois times
 						while(!found){
-							for(i = 0; i < (signed)Bchoosen->size(); i++){
-								cout << "- " << i << " : " << Bchoosen.at(k)->getName() << endl;
-							}
+							for(k = 0; k < (signed)Bchoosen->size(); k++)
+								cout <<  k+1 << ".   " << Bchoosen->at(k)->getName() << endl;
+							
+							cout << ">> ";
+							cin >> w;
+							w--;
+							Bchoosen->erase(Bchoosen->begin() + w);
 							if((Bchoosen->size() - Achoosen->size()) == 0)
 								found = true;
 						}
 					}
-
 				}
 
-				//Ordenando de modo randomico os vetores A e B
+				pair<Character*, Character*> p;
+				//Criando o vector de Threads
+				std::vector<std::thread> threads;
+				for(k = 0; k < (signed)Achoosen->size(); k++){
+					p = make_pair(Achoosen->at(k), Bchoosen->at(k));
+					threads.push_back(thread(batalha, p));
+				}
 
+				//Join em todo o vetor de threads
+				for(k = 0; k < (signed)threads.size(); k++){
+					threads[k].join();
+				}
 
+				//Imprimindo os resultados da batalha
+				cout << teams.at(i).getResults() << endl;
+				cout << teams.at(j).getResults() << endl;
 
-				//battle
 				break;
 			}
 		}
@@ -722,8 +729,8 @@ void main_menu(vector<Team*>& teams){
 
 int main(void){
 	srand(time(0));
-	StandardItems::setVectors();
-	vector<Team*> teams;
+	StandardItems::setVectors();	//sets the vectors of standard items in the game
+	vector<Team*> teams;			//vector of teams
 
 	main_menu(teams);
 

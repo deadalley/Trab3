@@ -96,6 +96,8 @@ public:
 	void unequipItem(Item*);
 	void useItem(Item*);
 
+	void useHealthPotion();
+
 	std::string toString();
 
 	virtual void attack(Character&) = 0;

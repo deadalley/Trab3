@@ -45,7 +45,6 @@ public:
 	void removeItem(std::string);
 	void removeItem(int);
 	int getItemsSize();
-	//void equipItem(Item*);
 
 	bool isEmpty();
 	bool isFull();

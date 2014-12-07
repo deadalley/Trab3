@@ -24,7 +24,6 @@ public:
 
 	void equip(Character*);
 	void unequip(Character*);
-	void use(Character*);
 };
 
 #endif

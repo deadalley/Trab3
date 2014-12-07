@@ -293,6 +293,19 @@ void Character::useItem(Item* item)
 	us->use(this);
 }
 
+void Character::useHealthPotion()
+{
+	Item* item;
+	for(int i = 0; i < my_items.getItemsSize(); i++){
+		item = my_items.searchItem(i);
+		if(item->getType() == HealthPotionType){
+			Usable *us = dynamic_cast<Usable*>(item);
+			us->use(this);
+			return;
+		}
+	}
+}
+
 std::string Character::toString()
 {
 	std::string info;
