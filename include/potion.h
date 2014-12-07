@@ -2,8 +2,9 @@
 #define H_POTION
 
 #include "item.h"
+#include "usable.h"
 
-class Potion : public Item {
+class Potion : public Item, public Usable {
 private:
 	int restore_points;
 	
@@ -16,8 +17,6 @@ public:
 	int getRestorePoints();
 	int getDefensePoints();
 	int getAttackPoints();
-	
-	virtual void use(Character *ch) = 0;
 };
 
 #endif

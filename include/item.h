@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <cstdio>
 
 enum ItemType {
 	ArmorType,
@@ -21,6 +22,9 @@ private:
 	ItemType type;
 
 protected:
+	bool is_equippable;
+	bool is_usable;
+
 	void setType(ItemType);
 
 public:
@@ -36,7 +40,8 @@ public:
 	virtual int getDefensePoints() = 0;
 	virtual int getAttackPoints() = 0;
 
-	virtual void use(Character *ch) = 0;
+	bool isEquippable();
+	bool isUsable();
 };
 
 #endif

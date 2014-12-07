@@ -7,13 +7,15 @@ class Wizard : public Character {
 protected:
 	int wisdom;
 	
-	int getAttackPoints();
-	int getDefensePoints();
-	
 public:
 	Wizard(std::string, int, Team&);
 	
+	//Add
 	void addWisdom(int);
+
+	//Getters
+	int getDefensePoints();
+	int getAttackPoints();
 
 	void attack(Character&);
 };

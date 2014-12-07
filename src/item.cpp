@@ -12,6 +12,9 @@ Item::Item(Item& item)
 {
 	this->name = item.getName();
 	this->price = item.getPrice();
+
+	this->is_equippable = item.isEquippable();
+	this->is_usable = item.isUsable();
 }
 
 Item::~Item()
@@ -31,6 +34,16 @@ double Item::getPrice()
 ItemType Item::getType()
 {
 	return type;
+}
+
+bool Item::isEquippable()
+{
+	return is_equippable;
+}
+
+bool Item::isUsable()
+{
+	return is_usable;
 }
 
 void Item::setType(ItemType item_type)

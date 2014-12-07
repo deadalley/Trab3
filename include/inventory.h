@@ -14,13 +14,10 @@ class Inventory{
 private:
 	int spaces;
 	double gold;
-	std::vector<std::pair<Item*, bool> > items;
+	std::vector<Item*> items;
 
 	int total_defense;
 	int total_attack;
-
-	bool has_armor;			//indicates if an armor has been equipped
-	int equipped_weapons;	//maximum 2
 
 	Character* parent;
 
@@ -48,10 +45,10 @@ public:
 	void removeItem(std::string);
 	void removeItem(int);
 	int getItemsSize();
+	//void equipItem(Item*);
 
 	bool isEmpty();
 	bool isFull();
-	void equipItem(Item*);
 };
 
 #endif

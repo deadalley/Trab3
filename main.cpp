@@ -1,4 +1,5 @@
 /* Jéssica Bargas Aissa - 8504250               */
+/* Lucas Tomazela -                             */
 /* Trabalho 2 - Programação Orientada a Objetos */
 
 #include "team.h"
@@ -16,30 +17,29 @@
 #include "manapotion.h"
 #include "healthpotion.h"
 #include "standarditems.h"
-#include "cstdio"
-#include "cstdlib"
+#include <cstdio>
 
 using namespace std;
 
 //Armors
 Armor* StandardItems::leather_armor = new Armor("Leather Armor", 12.0, 4, 3.0);
-Armor* StandardItems::iron_armor = new Armor("Iron Armor", 13.0, 10, 6.0);
-Armor* StandardItems::silver_armor = new Armor("Silver Armor", 15.0, 15, 8.0);
-Armor* StandardItems::gold_armor = new Armor("Gold Armor", 27.0, 18, 11.0);
-Armor* StandardItems::diamond_armor = new Armor("Diamond Armor", 40.0, 19, 14.0);
+Armor* StandardItems::iron_armor = new Armor("Iron Armor", 17.0, 23, 6.0);
+Armor* StandardItems::silver_armor = new Armor("Silver Armor", 22.0, 48, 8.0);
+Armor* StandardItems::gold_armor = new Armor("Gold Armor", 32.0, 65, 15.0);
+Armor* StandardItems::diamond_armor = new Armor("Diamond Armor", 40.0, 78, 20.0);
 
 //Weapons
 Weapon* StandardItems::dagger = new Weapon("Dagger", 12.0, 4, 4.0);
-Weapon* StandardItems::short_sword = new Weapon("Short Sword", 16.0, 6, 5.0);
-Weapon* StandardItems::long_sword = new Weapon("Long Sword", 22.0, 7, 10.0);
-Weapon* StandardItems::scythe = new Weapon("Scythe of Doom", 28.0, 9, 16.0);
-Weapon* StandardItems::axe = new Weapon("Generic Axe", 30.0, 9, 18.0);
+Weapon* StandardItems::short_sword = new Weapon("Short Sword", 16.0, 8, 5.0);
+Weapon* StandardItems::long_sword = new Weapon("Long Sword", 22.0, 12, 10.0);
+Weapon* StandardItems::scythe = new Weapon("Scythe of Doom", 28.0, 18, 16.0);
+Weapon* StandardItems::axe = new Weapon("Axe of Damnation", 30.0, 31, 18.0);
 
-Weapon* StandardItems::spear = new Weapon("Generic Spear", 14.0, 6, 14.0);
-Weapon* StandardItems::bow = new Weapon("Generic Bow", 18.0, 9, 28.0);
-Weapon* StandardItems::staff = new Weapon("Generic Staff", 23.0, 8, 12.0);
-Weapon* StandardItems::wand = new Weapon("Generic Wand", 20.0, 8, 2.0);
-Weapon* StandardItems::tesseract = new Weapon("Tesseract", 1300.0, 9, 45.0);
+Weapon* StandardItems::spear = new Weapon("Spear", 14.0, 6, 14.0);
+Weapon* StandardItems::bow = new Weapon("Wooden Bow", 18.0, 16, 28.0);
+Weapon* StandardItems::staff = new Weapon("Staff", 23.0, 22, 12.0);
+Weapon* StandardItems::wand = new Weapon("Low-Budget Wand", 20.0, 38, 2.0);
+Weapon* StandardItems::tesseract = new Weapon("Tesseract", 1300.0, 118, 45.0);
 
 //Potions
 ManaPotion* StandardItems::minor_mana_potion = new ManaPotion("Minor Mana Potion", 5.0, 3);
@@ -85,11 +85,11 @@ void battle(Team t1, Team t2){
 			//Faz os personagens utilizarem health potions
 			if (ch1->getHP() < 80){
 				cout << "    ";
-				ch1->useHealthPotion();
+				//ch1->useHealthPotion();
 			}
 			if (ch2->getHP() < 80) {
 				cout << "    ";
-				ch2->useHealthPotion();
+				//ch2->useHealthPotion();
 			}
 
 			//O primeiro personagem de cada time é aleatório
@@ -136,10 +136,9 @@ CharacterType character_type_menu(){
 }
 
 Color color_menu(){
-	int k = 0, menu_option = 0;
+	int k = 0;
 
 	while(1){
-		//cout << "== COLOR ==" << endl;
 		cout << "1. White" << endl;
 		cout << "2. Black" << endl;
 		cout << "3. Blue" << endl;
@@ -147,8 +146,8 @@ Color color_menu(){
 		cout << "5. Green" << endl;
 		cout << "6. Yellow" << endl;
 		cout << ">> ";
-		cin >> menu_option;
-		switch(menu_option){
+		cin >> k;
+		switch(k){
 			case 1:
 				return white;
 			case 2:
@@ -167,71 +166,53 @@ Color color_menu(){
 	}
 }
 
-Armor* armor_menu(double totalGold){
+Armor* armor_menu(){
     int k = 0;
     Armor* new_armor = NULL;
-    while(1){
-    	StandardItems::printArmors();
-	    cout << "6. Return" << endl;
-	    cout << ">> ";
-	    cin >> k;
 
-	    if(k==6) return NULL;
-	    
-	    k--;
-	    new_armor = StandardItems::getArmor(k);
+	StandardItems::printArmors();
+    cout << "6. Return" << endl;
+    cout << ">> ";
+    cin >> k;
 
-	    if(new_armor->getPrice()>totalGold)
-	    	cout << ">> Not enough gold.\n";
-	    
-	    else break;
-    }
+    if(k==6) return NULL;
+    
+    k--;
+    new_armor = StandardItems::getArmor(k);
 
     return new_armor;
 }
 
-Potion* potion_menu(double totalGold){
+Potion* potion_menu(){
 	int k = 0;
     Potion* new_potion = NULL;
-    while(1){
-    	StandardItems::printPotions();
-	    cout << "9. Return" << endl;
-	    cout << ">> ";
-	    cin >> k;
 
-	    if(k==9) return NULL;
-	    
-	    k--;
-	    new_potion = StandardItems::getPotion(k);
+	StandardItems::printPotions();
+    cout << "9. Return" << endl;
+    cout << ">> ";
+    cin >> k;
 
-	    if(new_potion->getPrice()>totalGold)
-	    	cout << ">> Not enough gold.\n";
-	    
-	    else break;
-    }
+    if(k==9) return NULL;
+    
+    k--;
+    new_potion = StandardItems::getPotion(k);
 
     return new_potion;
 }
 
-Weapon* weapon_menu(double totalGold){
+Weapon* weapon_menu(){
 	int k = 0;
     Weapon* new_weapon = NULL;
-    while(1){
-    	StandardItems::printWeapons();
-	    cout << "11. Return" << endl;
-	    cout << ">> ";
-	    cin >> k;
 
-	    if(k==11) return NULL;
-	    
-	    k--;
-	    new_weapon = StandardItems::getWeapon(k);
+	StandardItems::printWeapons();
+    cout << "11. Return" << endl;
+    cout << ">> ";
+    cin >> k;
 
-	    if(new_weapon->getPrice()>totalGold)
-	    	cout << ">> Not enough gold.\n";
-	    
-	    else break;
-    }
+    if(k==11) return NULL;
+    
+    k--;
+    new_weapon = StandardItems::getWeapon(k);
 
     return new_weapon;
 }
@@ -256,35 +237,44 @@ void items_store_menu(Character& ch){
 		switch(menu_option){
 			case 1:{
 				//Armors
-			    Armor* new_armor = armor_menu(ch.getTotalGold());
+			    Armor* new_armor = armor_menu();
 			    
 			    if(new_armor==NULL) break;
 			    
 			    ch.spendGold(new_armor->getPrice());
+			    
+			    if(ch.getTotalGold()<new_armor->getPrice())
+			    	break;
+			    
 			    ch.addToInventory(new_armor);
-			    cout << ">> " << new_armor->getName() << " added to " << ch.getName() << "'s inventory." << endl;
 				break;
 			}
 			case 2:{
 				//Potions
-				Potion* new_potion = potion_menu(ch.getTotalGold());
+				Potion* new_potion = potion_menu();
 
 				if(new_potion==NULL) break;
 			    
 			    ch.spendGold(new_potion->getPrice());
+
+			    if(ch.getTotalGold()<new_potion->getPrice())
+			    	break;
+
 			    ch.addToInventory(new_potion);
-			    cout << ">> " << new_potion->getName() << " added to " << ch.getName() << "'s inventory." << endl;
 				break;
 			}
 			case 3:{
 				//Weapons
-				Weapon* new_weapon = weapon_menu(ch.getTotalGold());
+				Weapon* new_weapon = weapon_menu();
 				
 				if(new_weapon==NULL) break;
 			    
 			    ch.spendGold(new_weapon->getPrice());
+
+				if(ch.getTotalGold()<new_weapon->getPrice())
+			    	break;
+
 			    ch.addToInventory(new_weapon);
-			    cout << ">> " << new_weapon->getName() << " added to " << ch.getName() << "'s inventory." << endl;
 				break;
 			}
 		}
@@ -294,26 +284,30 @@ void items_store_menu(Character& ch){
 void inventory_menu(Character& ch){
 	int menu_option = 0;
 
-	while(menu_option != 4){
-		cout << "== INVENTORY ==" << endl;
+	while(menu_option != 5){
+		cout << "\n== INVENTORY ==" << endl;
 
 		cout << "Listing " << ch.getName() << "'s inventory." << endl;
 		cout << "---------------------------------------------------------------" << endl;
 		ch.listInventory();
 		cout << "---------------------------------------------------------------" << endl;
+		
+		if(ch.inventoryIsEmpty()) break;
+		
 		cout << "(E): Equipped" << endl;
 		cout << "(U): Unequipped" << endl;
 
 		cout << "1. Equip Item" << endl;
-		cout << "2. Use Item" << endl;
-		cout << "3. Sell Item" << endl;
-		cout << "4. Return" << endl;
+		cout << "2. Unequip Item" << endl;
+		cout << "3. Use Item" << endl;
+		cout << "4. Sell Item" << endl;
+		cout << "5. Return" << endl;
 		cout << ">> ";
 		cin >> menu_option;
 
 		switch(menu_option){
 			case 1:{
-				//Equip Item
+				//Equip item
 				int k = 0;
 				cout << ">> Select item to equip:" << endl;
 				cout << ">> ";
@@ -324,7 +318,18 @@ void inventory_menu(Character& ch){
 				break;
 			}
 			case 2:{
-				//Edit team
+				//Unequip item
+				int k = 0;
+				cout << ">> Select item to unequip:" << endl;
+				cout << ">> ";
+				cin >> k;
+				k--;
+				Item* item = ch.retrieveItem(k);
+				ch.unequipItem(item);
+				break;
+			}
+			case 3:{
+				//Use item
 				int k = 0;
 				cout << ">> Select item to use:" << endl;
 				cout << ">> ";
@@ -334,8 +339,16 @@ void inventory_menu(Character& ch){
 				ch.useItem(item);
 				break;
 			}
-			case 3:{
-				//Battle
+			case 4:{
+				//Sell item
+				int k = 0;
+				cout << ">> Select item to sell:" << endl;
+				cout << ">> ";
+				cin >> k;
+				k--;
+				Item* item = ch.retrieveItem(k);
+				ch.removeFromInventory(item);
+				ch.earnGold(item->getPrice());
 				break;
 			}
 		}
@@ -413,10 +426,6 @@ void character_menu(Character& ch){
 			case 6:{
 				//Access character inventory
 				inventory_menu(ch);
-				/*ch.listInventory();
-				cout << ">> [ENTER]";
-				getchar();
-				getchar();*/
 			    break;
 			}
 			case 7:{
@@ -527,20 +536,14 @@ void team_menu(Team& team){
 					team.removeChar(ch);
 					cout << ">> " << ch->getName() << " removed successfully from " << team.getName() << endl;
 				}
-				cout << ">> [ENTER]";
-				getchar();
-				getchar();
 				break;
 			}
 			case 5:{
 				//Edit character
 				int k = 0;
-				if(team.numOfCharacters()==0){
+				if(team.numOfCharacters()==0)
 					cout << ">> No characters in " << team.getName() << ". Please add characters." << endl;
-					cout << ">> [ENTER]";
-					getchar();
-					getchar();
-				}
+
 				else{
 					team.listCharacters();
 					cout << ">> ";

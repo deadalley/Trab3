@@ -15,6 +15,8 @@ void ManaPotion::use(Character *ch)
 	if (ch == NULL)
 		return;
 
-	std::cout << ch->getName() << " used " << getName() << " (+" << getRestorePoints() << "MP)!" << std::endl;
+	std::cout << ">> " << ch->getName() << " used " << getName() << " (+" << getRestorePoints() << "MP)!" << std::endl;
 	ch->addMP(getRestorePoints());
+
+	ch->removeFromInventory(this);
 }

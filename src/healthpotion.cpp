@@ -15,6 +15,8 @@ void HealthPotion::use(Character *ch)
 	if (ch == NULL)
 		return;
 
-	std::cout << ch->getName() << " used " << getName() << " (+" << getRestorePoints() << "HP)!" << std::endl;
+	std::cout << ">> " << ch->getName() << " used " << getName() << " (+" << getRestorePoints() << "HP)!" << std::endl;
 	ch->addHP(getRestorePoints());
+
+	ch->removeFromInventory(this);
 }

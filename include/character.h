@@ -9,8 +9,8 @@
 
 #include "item.h"
 #include "inventory.h"
-#include "armor.h"
-#include "weapon.h"
+#include "equippable.h"
+#include "usable.h"
 
 class Team;
 
@@ -28,7 +28,10 @@ private:
 	int HP;
 	int MP;
 
-	CharacterType type;
+	CharacterType type;		//indentifies the type of character
+
+	bool has_armor;			//indicates if an armor has been equipped
+	int equipped_weapons;	//maximum 2
 
 protected:
 	int XP;
@@ -50,7 +53,6 @@ public:
 	void addXP(int);
 	void addMP(int);
 	void addHP(int);
-	void addToInventory(Item*);
 
 	//Getters
 	std::string getName();
@@ -77,17 +79,25 @@ public:
 	void setDexterity(int);
 	void setConstitution(int);
 
-	void useHealthPotion();
-	void useManaPotion();
+	bool isAlive();
+	bool inventoryIsEmpty();
 
 	void earnGold(double);
 	void spendGold(double);
 
 	void listInventory();
-	void equipAll();
+	
+	Item* retrieveItem(int);
+	
+	void addToInventory(Item*);
+	void removeFromInventory(Item*);
+	
+	void equipItem(Item*);
+	void unequipItem(Item*);
+	void useItem(Item*);
 
 	std::string toString();
-	bool isAlive();
+
 	virtual void attack(Character&) = 0;
 	
 };

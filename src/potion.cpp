@@ -6,6 +6,8 @@ Potion::Potion(std::string name, double price, int rp) : Item(name, price)
 		rp = 1;
 
 	restore_points = rp;
+	is_usable = true;
+	is_equippable = false;
 }
 
 Potion::Potion(Potion& potion) : Item(potion.getName(), potion.getPrice())

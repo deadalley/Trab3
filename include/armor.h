@@ -2,8 +2,9 @@
 #define H_ARMOR
 
 #include "item.h"
+#include "equippable.h"
 
-class Armor : public Item {
+class Armor : public Item, public Equippable {
 protected:
 	int defense_points;
 	double weight;
@@ -21,6 +22,8 @@ public:
 	//Setters
 	void setWeight(double);
 
+	void equip(Character*);
+	void unequip(Character*);
 	void use(Character*);
 };
 

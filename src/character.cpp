@@ -20,6 +20,9 @@ Character::Character(std::string name, Team& team, CharacterType type)
 	this->type = type;
 
 	my_items.setParent(this);
+
+	has_armor = false;
+	equipped_weapons = 0;
 }
 
 Character::~Character()
@@ -159,34 +162,16 @@ void Character::setConstitution(int ct)
 	constitution = ct;
 }
 
-void Character::useHealthPotion()
-{
-	Item *item;
-	for (int i = 0; i < my_items.getItemsSize(); i++){
-		item = my_items.searchItem(i);
-		if (item->getType() == HealthPotionType){
-			item->use(this);
-			my_items.removeItem(i);
-			return;
-		}
-	}
-
-	std::cout << ">> No Health Potions available (" << getName() << ").\n";
+bool Character::isAlive(){
+	if(HP > 0)
+		return true;
+	
+	return false;
 }
 
-void Character::useManaPotion()
+bool Character::inventoryIsEmpty()
 {
-	Item *item;
-	for (int i = 0; i < my_items.getItemsSize(); i++){
-		item = my_items.searchItem(i);
-		if (item->getType() == ManaPotionType){
-			item->use(this);
-			my_items.removeItem(i);
-			return;
-		}
-	}
-
-	std::cout << ">> No Mana Potions available (" << getName() << ").\n";
+	return my_items.isEmpty();
 }
 
 void Character::earnGold(double g)
@@ -201,28 +186,111 @@ void Character::spendGold(double g)
 
 void Character::listInventory()
 {
-	std::cout << ">> Listing " << getName() << "'s inventory: " << std::endl;
 	if(my_items.isEmpty()){
 		std::cout << "Inventory is empty." << std::endl;
 	}
 	for (int i = 0; i < my_items.getItemsSize(); i++){
-		std::cout << "\t" << i+1 << ".   " << my_items.searchItem(i)->getName() << std::endl;
+		Item* item = my_items.searchItem(i);
+		
+		std::cout << "\t" << i+1 << ".   " << item->getName();
+		
+		if(item->isEquippable()){
+		
+			Equippable *eq = dynamic_cast<Equippable*>(item);
+		
+			if(eq->isEquipped())
+				std::cout << "(E)";
+		
+			else std::cout << "(U)";
+		}
+
+		std::cout << std::endl;
 	}
+}
+
+Item* Character::retrieveItem(int k)
+{
+	if(k > my_items.getItemsSize() || k < 0) return NULL;
+	return my_items.searchItem(k);
 }
 
 void Character::addToInventory(Item *item)
 {
 	my_items.insertItem(item);
+	std::cout << ">> " << item->getName() << " added to " << alias << "'s inventory." << std::endl;
 }
 
-void Character::equipAll()
+void Character::removeFromInventory(Item* item)
 {
-	Item *item;
-	for (int i = 0; i < my_items.getItemsSize(); i++){
-		item = my_items.searchItem(i);
-		if (item->getType() != HealthPotionType && item->getType() != ManaPotionType)
-			my_items.equipItem(my_items.searchItem(i));
+	my_items.removeItem(item->getName());
+	std::cout << ">> " << item->getName() << " removed from " << alias << "'s inventory." << std::endl;
+}
+
+void Character::equipItem(Item* item)
+{
+	Equippable *eq = dynamic_cast<Equippable*>(item);
+
+	if(!item->isEquippable()){
+		std::cout << ">> " << item->getName() << " is not equippable." << std::endl;
+		return;
 	}
+
+	if(eq->isEquipped()){
+		std::cout << ">> " << item->getName() << " is already equipped." << std::endl;
+		return;
+	}
+
+	if(item->getType() == WeaponType){
+		if(equipped_weapons==2){
+			std::cout << ">> You can't equip more than two weapons." << std::endl;
+			return;
+		}
+		equipped_weapons++;
+	}
+
+	if(item->getType() == ArmorType){
+		if(has_armor){
+			std::cout << ">> You can't equip more than one armor." << std::endl;
+			return;
+		}
+		has_armor = true;
+	}
+
+	eq->equip(this);
+}
+
+void Character::unequipItem(Item* item)
+{
+	Equippable *eq = dynamic_cast<Equippable*>(item);
+
+	if(!item->isEquippable()){
+		std::cout << ">> " << item->getName() << " is not equippable." << std::endl;
+		return;
+	}
+
+	if(!eq->isEquipped()){
+		std::cout << ">> " << item->getName() << " is already unequipped." << std::endl;
+		return;
+	}
+
+	if(item->getType() == WeaponType)
+		equipped_weapons--;
+
+	if(item->getType() == ArmorType)
+		has_armor = false;
+
+	eq->unequip(this);	
+}
+
+void Character::useItem(Item* item)
+{
+	if(!item->isUsable()){
+		std::cout << ">> " << item->getName() << " is not usable." << std::endl;
+		return;
+	}
+	
+	Usable* us = dynamic_cast<Usable*>(item);
+	us->use(this);
 }
 
 std::string Character::toString()
@@ -260,11 +328,4 @@ std::string Character::toString()
 	info += aux.str();
 
 	return info;
-}
-
-bool Character::isAlive(){
-	if(this->HP > 0)
-		return true;
-	else
-		return false;
 }

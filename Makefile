@@ -3,7 +3,7 @@ CFLAGS = -c -g
 IFLAGS = -Iinclude
 SRCDIR = src
 OBJDIR = obj
-SRC = team.cpp inventory.cpp item.cpp armor.cpp weapon.cpp character.cpp main.cpp knight.cpp wizard.cpp thief.cpp potion.cpp manapotion.cpp healthpotion.cpp standarditems.cpp
+SRC = team.cpp inventory.cpp item.cpp equippable.cpp armor.cpp weapon.cpp character.cpp main.cpp knight.cpp wizard.cpp thief.cpp potion.cpp manapotion.cpp healthpotion.cpp standarditems.cpp
 OBJ = $(patsubst %.cpp,$(OBJDIR)/%.o,$(SRC))
 
 all: trab3
